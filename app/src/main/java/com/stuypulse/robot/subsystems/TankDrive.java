@@ -1,6 +1,7 @@
 package com.stuypulse.robot.subsystems;
 
 import com.stuypulse.stuylib.math.*;
+import com.stuypulse.graphics.Line;
 import com.stuypulse.physics.Force;
 import com.stuypulse.robot.subsystems.components.Wheel;
 
@@ -22,8 +23,8 @@ public class TankDrive implements Drivetrain {
 
     /**
      * Control the left and right side of the robot
-     * @param left the speed of the left wheel
-     * @param right the speed of the right wheel
+     * @param left the speed of the left wheel [-1...+1]
+     * @param right the speed of the right wheel [-1...+1]
      */
     public void tankDrive(double left, double right) {
         leftWheel.set(left);
@@ -32,8 +33,8 @@ public class TankDrive implements Drivetrain {
 
     /**
      * Control the robot using a speed and a turn amount
-     * @param speed speed that the robot will go
-     * @param angle amount it should turn
+     * @param speed speed that the robot will go [-1...+1]
+     * @param angle amount it should turn [-1...+1]
      */
     public void arcadeDrive(double speed, double angle) {
         tankDrive(speed + angle, speed - angle);
@@ -49,4 +50,17 @@ public class TankDrive implements Drivetrain {
         );
     }
 
+    public Line[] getMesh() {
+        return new Line[] {
+            // Box
+            new Line(new Vector2D(+1.0, +1.0), new Vector2D(-1.0, +1.0)),
+            new Line(new Vector2D(-1.0, +1.0), new Vector2D(-1.0, -1.0)),
+            new Line(new Vector2D(-1.0, -1.0), new Vector2D(+1.0, -1.0)),
+            new Line(new Vector2D(+1.0, -1.0), new Vector2D(+1.0, +1.0)),
+
+            // Wheels
+            new Line(new Vector2D(-0.8, +1.2), new Vector2D(+0.8, +1.2)),
+            new Line(new Vector2D(-0.8, -1.2), new Vector2D(+0.8, -1.2)),
+        };
+    }
 }

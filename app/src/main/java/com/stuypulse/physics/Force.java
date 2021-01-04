@@ -9,6 +9,10 @@ import com.stuypulse.stuylib.math.*;
  */
 public class Force {
 
+    /***************************************/
+    /***   FACTORY CONSTRUCTOR METHODS   ***/
+    /***************************************/
+
     public static Force getForce(Vector2D force, double torque) {
         return new Force(force, torque);
     }
@@ -37,6 +41,10 @@ public class Force {
         return new Force(force, torque);
     }
     
+    /*************************/
+    /*** Rest of the class ***/
+    /*************************/
+
     private final Vector2D force;
     private final double torque;
 

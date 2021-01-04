@@ -16,7 +16,7 @@ import com.stuypulse.stuylib.util.StopWatch;
  * This is the robot class that you will be extending when making your
  * own robot. It is relatively simple, and supports different types of drivetrain.
  */
-public abstract class Robot<DT extends Drivetrain> implements IRobot {
+public abstract class Robot<DT extends Drivetrain> {
 
     /***************************************/
     /*** ABSTRACT FUNCTIONS TO IMPLEMENT ***/

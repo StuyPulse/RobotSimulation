@@ -5,6 +5,7 @@ import java.awt.Color;
 import com.stuypulse.stuylib.math.*;
 import com.stuypulse.stuylib.control.*;
 import com.stuypulse.robot.subsystems.*;
+import com.stuypulse.robot.subsystems.components.Wheel;
 import com.stuypulse.robot.*;
 /*************************************************/
 
@@ -13,16 +14,16 @@ import com.stuypulse.robot.*;
  * of a robot would look like. Be careful not to miss the imports,
  * and also checkout the robot class to see some functions you can use
  */
-public class Edwin extends Robot<TankDrive> {
+public class JeremyBot extends Robot<SwerveDrive> {
 
-    public Edwin() {
+    public JeremyBot() {
         // Make sure to pass in an instance of your drivetrain to 
         // the parent class so it can use it in the simulation
-        super(new TankDrive());
+        super(new SwerveDrive(new Vector2D(5.0, 2.0)));
     }
 
     public String getAuthor() {
-        return "Sam B";
+        return "Myles P";
     }
 
     public void execute() {
@@ -30,11 +31,13 @@ public class Edwin extends Robot<TankDrive> {
         Vector2D position = getPosition();
         Angle angle = getAngle();
 
-        if(position.x < 5) {
-            getDrivetrain().arcadeDrive(0.2, 0);
-        } else {
-            getDrivetrain().arcadeDrive(-0.2, 0);
-        }
+        Vector2D target = Angle.fromRadians(System.currentTimeMillis() / 2500.).getVector().mul(7.5);
+
+        // Makes the control field centric
+        Vector2D direction = target.sub(position).normalize();
+        direction = direction.rotate(Angle.kZero.sub(angle));
+
+        getDrivetrain().swerveDrive(direction, 0.25);
     }
 
     public Color getColor() {

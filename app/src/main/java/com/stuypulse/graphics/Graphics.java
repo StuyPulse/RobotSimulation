@@ -1,7 +1,7 @@
 package com.stuypulse.graphics;
 
 import com.stuypulse.physics.Position;
-import com.stuypulse.robot.IRobot;
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.Drivetrain;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
@@ -16,7 +16,8 @@ import java.util.LinkedList;
  */
 public class Graphics {
 
-    List<IRobot> robots;
+
+    List<Robot<?>> robots;
     
     public Graphics() {
         robots = new LinkedList<>();
@@ -27,8 +28,8 @@ public class Graphics {
         StdDraw.setYscale(-10, 10);
     }
 
-    public Graphics addRobot(IRobot... rs) {
-        for(IRobot r : rs) {
+    public Graphics addRobot(Robot<?>... rs) {
+        for(var r : rs) {
             robots.add(r);
         }
         return this;
@@ -39,32 +40,22 @@ public class Graphics {
     }
 
 
-    public void drawRobot(IRobot r) {
+    public void drawRobot(Robot<?> r) {
         StdDraw.setPenColor(r.getColor());
         Vector2D pos = r.getPosition();
-        Vector2D offset = new Vector2D(1.0, 1.0);
-        offset = offset.rotate(r.getAngle());
+        Angle ang = r.getAngle();
+        Line[] mesh = r.getDrivetrain().getMesh();
 
-        line(pos.add(offset), pos.add(offset.rotate(Angle.k90deg)));
-        offset = offset.rotate(Angle.k90deg);
-        line(pos.add(offset), pos.add(offset.rotate(Angle.k90deg)));
-        offset = offset.rotate(Angle.k90deg);
-        line(pos.add(offset), pos.add(offset.rotate(Angle.k90deg)));
-        offset = offset.rotate(Angle.k90deg);
-        line(pos.add(offset), pos.add(offset.rotate(Angle.k90deg)));
-        offset = offset.rotate(Angle.k90deg);
-
-        Vector2D wheelOffset = new Vector2D(1.0, 0.0).rotate(r.getAngle());
-        line(pos.add(wheelOffset.mul(0.9)), pos.add(wheelOffset.mul(1.1)));
-        wheelOffset = new Vector2D(-1.0, 0.0).rotate(r.getAngle());
-        line(pos.add(wheelOffset.mul(0.9)), pos.add(wheelOffset.mul(1.1)));
+        for(Line l : mesh) {
+            l.transform(pos, ang).draw();
+        }
     }
 
     public void periodic() {
         StdDraw.enableDoubleBuffering();
         StdDraw.clear();
 
-        for(IRobot r : robots) {
+        for(Robot<?> r : robots) {
             drawRobot(r);
         }
 

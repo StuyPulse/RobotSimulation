@@ -14,7 +14,7 @@ import com.stuypulse.stuylib.math.*;
  * 
  * Its driven like a motor on a robot, and it is used to simulate realistic movement.
  */
-public final class Wheel {
+public class Wheel {
 
     private final Vector2D position;
 
@@ -59,6 +59,10 @@ public final class Wheel {
         return Angle.fromRadians(realAngle.get());
     }
 
+    public Angle getAngleError() {
+        return getAngle().sub(angle);
+    }
+
     public void setAngle(Angle angle) {
         this.angle = angle;
     }
@@ -74,7 +78,7 @@ public final class Wheel {
     public Force getForce() {
         return Force.getPointForce(
             position, 
-            getAngle().add(Angle.k90deg).getVector().mul(getSpeed())
+            getAngle().getVector().mul(getSpeed())
         );
     } 
 }

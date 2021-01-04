@@ -12,21 +12,21 @@ import myrobots.*;
  */
 public class Main {
 
-    public static IRobot[] robots = new IRobot[]{
+    public static Robot<?>[] robots = new Robot<?>[]{
         new Edwin(),
+        new JeremyBot(),
     };
 
     public static void main(String[] args) throws Exception {
         Graphics g = new Graphics().addRobot(robots);
 
-
         while(true) {
-            for(IRobot r : robots) {
+            for(Robot<?> r : robots) {
                 r.periodic();
             }
             g.periodic();
 
-            Thread.sleep(50);
+            Thread.sleep(10);
         }
 
     }
