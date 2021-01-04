@@ -20,23 +20,28 @@ public class TankDrive implements Drivetrain {
         rightWheel = new Wheel(new Vector2D(+1.0, 0.0));
     }
 
+    /**
+     * Control the left and right side of the robot
+     * @param left the speed of the left wheel
+     * @param right the speed of the right wheel
+     */
     public void tankDrive(double left, double right) {
         leftWheel.set(left);
         rightWheel.set(right);
     }
 
+    /**
+     * Control the robot using a speed and a turn amount
+     * @param speed speed that the robot will go
+     * @param angle amount it should turn
+     */
     public void arcadeDrive(double speed, double angle) {
         tankDrive(speed + angle, speed - angle);
     }
 
-    public void curvatureDrive(double speed, double angle, boolean useQuickTurn) {
-        if(useQuickTurn) {
-            arcadeDrive(speed, angle);
-        } else {
-            arcadeDrive(speed, angle * speed);
-        }
-    }
-
+    /**
+     * Unrelated function for physics calculation
+     */
     public Force getNetForce() {
         return Force.getNetForce(
             leftWheel.getForce(),
