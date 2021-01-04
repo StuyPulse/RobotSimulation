@@ -61,7 +61,7 @@ public class SwerveDrive implements Drivetrain {
     /**
      * This is how the SwerveDrive is controlled
      * @param direction a vector representing the direction that the robot needs to go
-     * @param turn
+     * @param turn the amount it should be turning, high values can make the direction unusable
      */
     public void swerveDrive(Vector2D direction, double turn) {
         double max = 1.0;
@@ -84,7 +84,7 @@ public class SwerveDrive implements Drivetrain {
                 .stream()
                 .map(module -> module.getForce())
                 .collect(Collectors.toList())
-                .toArray(new Force[modules.length])
+                .toArray(new Force[0])
         );
     }
 
