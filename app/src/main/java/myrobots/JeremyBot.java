@@ -19,7 +19,7 @@ public class JeremyBot extends Robot<SwerveDrive> {
     public JeremyBot() {
         // Make sure to pass in an instance of your drivetrain to 
         // the parent class so it can use it in the simulation
-        super(new SwerveDrive(new Vector2D(5.0, 2.0)));
+        super(new SwerveDrive(new Vector2D(2.0, 2.0)));
     }
 
     public String getAuthor() {
@@ -31,13 +31,23 @@ public class JeremyBot extends Robot<SwerveDrive> {
         Vector2D position = getPosition();
         Angle angle = getAngle();
 
-        Vector2D target = Angle.fromRadians(System.currentTimeMillis() / 2500.).getVector().mul(7.5);
+        Vector2D direction = new Vector2D(0.0, 0.0);
 
+        if(position.y < 5) {
+            direction = new Vector2D(0.0, 1.0);    
+        } else {
+            if(position.x < 5) {
+                direction = new Vector2D(1.0, 0.0);
+            } else {
+                direction = new Vector2D(1.0, 1.0);
+            }
+        }
+        
+        
         // Makes the control field centric
-        Vector2D direction = target.sub(position).normalize();
         direction = direction.rotate(Angle.kZero.sub(angle));
 
-        getDrivetrain().swerveDrive(direction, 0.25);
+        getDrivetrain().swerveDrive(direction, 0.0);
     }
 
     public Color getColor() {

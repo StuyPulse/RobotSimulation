@@ -6,7 +6,7 @@ package com.stuypulse;
 public interface Constants {
 
     interface WheelProps {
-        double SPEED = 5;
+        double SPEED = 7.5;
         double RC = 0.5;
 
         double ANGLE_RC = 0.1;

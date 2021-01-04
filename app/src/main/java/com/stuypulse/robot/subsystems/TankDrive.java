@@ -17,8 +17,8 @@ public class TankDrive implements Drivetrain {
     private final Wheel rightWheel;
     
     public TankDrive() {
-        leftWheel = new Wheel(new Vector2D(-1.0, 0.0));
-        rightWheel = new Wheel(new Vector2D(+1.0, 0.0));
+        leftWheel = new Wheel(new Vector2D(0.0, 1.0));
+        rightWheel = new Wheel(new Vector2D(0.0, -1.0));
     }
 
     /**
