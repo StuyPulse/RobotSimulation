@@ -132,7 +132,7 @@ public class SwerveDrive implements Drivetrain {
                 .stream()
                 .map(module -> module.getForce())
                 .collect(Collectors.toList())
-                .toArray(new Force[modules.length])
+                .toArray(new Force[0])
         );
     }
 
