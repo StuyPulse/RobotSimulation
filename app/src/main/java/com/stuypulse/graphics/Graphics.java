@@ -29,7 +29,7 @@ public class Graphics {
     }
 
     public Graphics addRobot(Robot<?>... rs) {
-        for(var r : rs) {
+        for(Robot<?> r : rs) {
             robots.add(r);
         }
         return this;

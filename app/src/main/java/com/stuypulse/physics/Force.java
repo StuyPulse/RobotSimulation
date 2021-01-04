@@ -9,6 +9,10 @@ import com.stuypulse.stuylib.math.*;
  */
 public class Force {
 
+    public interface ForceSupplier {
+        public Force toForce();
+    }
+
     /***************************************/
     /***   FACTORY CONSTRUCTOR METHODS   ***/
     /***************************************/

@@ -13,7 +13,7 @@ import myrobots.*;
 public class Main {
 
     public static Robot<?>[] robots = new Robot<?>[]{
-        new Edwin(),
+        //new Edwin(),
         new JeremyBot(),
     };
 

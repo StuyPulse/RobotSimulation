@@ -18,11 +18,11 @@ public class Wheel {
 
     private final Vector2D position;
 
-    public Angle angle;
-    public IStream realAngle; 
+    private Angle angle;
+    private IStream realAngle; 
 
-    public double target;
-    public IFilter filter;
+    private double target;
+    private IFilter filter;
 
     public Wheel(Vector2D pos) {
         position = pos;

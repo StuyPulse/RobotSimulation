@@ -6,15 +6,19 @@ import com.stuypulse.stuylib.math.*;
 import com.stuypulse.stuylib.control.*;
 import com.stuypulse.robot.subsystems.*;
 import com.stuypulse.robot.subsystems.components.Wheel;
+import com.stuypulse.graphics.StdDraw;
 import com.stuypulse.robot.*;
 /*************************************************/
 
 /**
- * This robot is here to show you what an example implementation
- * of a robot would look like. Be careful not to miss the imports,
- * and also checkout the robot class to see some functions you can use
+ * This robot is an example of a robot using swerve drive.
+ * 
+ * This is useful when testing swerve.
  */
 public class JeremyBot extends Robot<SwerveDrive> {
+
+    public static final double kP = 1.0;
+    public static final double kD = 0.25;
 
     public JeremyBot() {
         // Make sure to pass in an instance of your drivetrain to 
@@ -23,31 +27,35 @@ public class JeremyBot extends Robot<SwerveDrive> {
     }
 
     public String getAuthor() {
-        return "Myles P";
+        return "Sam B / Myles P";
     }
 
     public void execute() {
         // Get information about the drivetrain;
         Vector2D position = getPosition();
+        Vector2D velocity = getVelocity();
         Angle angle = getAngle();
 
+        // These values will be passed into the drivetrain
         Vector2D direction = new Vector2D(0.0, 0.0);
+        double turn = 0;
 
-        if(position.y < 5) {
-            direction = new Vector2D(0.0, 1.0);    
-        } else {
-            if(position.x < 5) {
-                direction = new Vector2D(1.0, 0.0);
-            } else {
-                direction = new Vector2D(1.0, 1.0);
-            }
+        // This code just follows the mouse and spins when the moust is down
+        Vector2D target = new Vector2D(StdDraw.mouseX(), StdDraw.mouseY());
+        direction = target.sub(position.mul(kP).add(velocity.mul(kD)));
+        if(direction.magnitude() < 0.05) {
+            direction = direction.mul(0.0);
         }
-        
+
+        if(StdDraw.isMousePressed()) {
+            turn = 1.0;
+        }
         
         // Makes the control field centric
         direction = direction.rotate(Angle.kZero.sub(angle));
 
-        getDrivetrain().swerveDrive(direction, 0.0);
+        // Drive the drivetrain
+        getDrivetrain().swerveDrive(direction, turn);
     }
 
     public Color getColor() {
