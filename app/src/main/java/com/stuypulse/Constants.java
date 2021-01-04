@@ -7,9 +7,9 @@ public interface Constants {
 
     interface WheelProps {
         double SPEED = 20;
-        double RC = 0.5;
+        double RC = 0.25;
 
-        double ANGLE_RC = 0.075;
+        double ANGLE_RC = 0.1;
     }
 
     interface Physics {

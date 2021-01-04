@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.stuypulse.graphics.Line;
 import com.stuypulse.physics.Force;
+import com.stuypulse.robot.subsystems.components.SwerveModule;
 import com.stuypulse.robot.subsystems.components.Wheel;
 
 /**
@@ -20,58 +21,9 @@ import com.stuypulse.robot.subsystems.components.Wheel;
 public class SwerveDrive implements Drivetrain {
 
     /**
-     * This class handles the setting the speed and direction of each wheel
-     * It also has to handle normalization since thats an important part of SwerveDrive
-     */
-    private static class Module extends Wheel {
-        private double speed;
-        private Angle angle;
-
-        public Module(Vector2D position) {
-            super(position);
-        }
-
-        /**
-         * Sets up the module to drive with certain instructions
-         */
-        public double point(Vector2D direction, double turn) {
-            // Make sure the controls are in bounds
-            direction = direction.div(Math.max(1.0, direction.magnitude()));
-            turn = SLMath.limit(turn);
-
-            // Calculate the vector the wheel should follow
-            Vector2D perpendicular = getPosition().normalize().rotate(Angle.k90deg);
-            Vector2D wheelVector = direction.add(perpendicular.mul(turn));
-
-            // Angle and Speed the wheel should go at to follow the vector
-            angle = wheelVector.getAngle();
-            speed = wheelVector.magnitude() * angle.sub(getAngle()).cos();
-
-            // Return the speed that it will go, used for normalization later
-            return speed;
-        }
-
-        /**
-         * Modifies the drive instructions to be normalized
-         * This prevents distortion
-         */
-        public void normalize(double maxSpeed) {
-            speed /= maxSpeed;
-        }
-
-        /**
-         * Send the drive instructions to the wheel
-         */
-        public void drive() {
-            set(speed);
-            setAngle(angle);
-        }
-    }
-
-    /**
      * A list of wheels (this class can work with a general number of wheels)
      */
-    private final Module[] modules;
+    private final SwerveModule[] modules;
     
     /**
      * Creates a swerve drive with four wheels. 
@@ -100,9 +52,9 @@ public class SwerveDrive implements Drivetrain {
         if (wheels.length <= 1)
             throw new IllegalArgumentException("Must have at least two wheels");
         
-        this.modules = new Module[wheels.length];
+        this.modules = new SwerveModule[wheels.length];
         for(int i = 0; i < wheels.length; ++i) {
-            this.modules[i] = new Module(wheels[i]);
+            this.modules[i] = new SwerveModule(wheels[i]);
         }
     }
 
@@ -113,11 +65,11 @@ public class SwerveDrive implements Drivetrain {
      */
     public void swerveDrive(Vector2D direction, double turn) {
         double max = 1.0;
-        for (Module m : modules) {
+        for (SwerveModule m : modules) {
             max = Math.max(max, m.point(direction, turn));
         }
 
-        for (Module m : modules) { 
+        for (SwerveModule m : modules) { 
             m.normalize(max);
             m.drive();
         }
