@@ -5,6 +5,13 @@ package com.stuypulse;
  */
 public interface Constants {
 
+    interface WindowSettings {
+        int WIDTH = 640;
+        int HEIGHT = 640;
+        String TITLE = "Robot Simulation";
+
+    }
+
     interface WheelProps {
         double SPEED = 20;
         double RC = 0.25;
