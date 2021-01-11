@@ -4,8 +4,6 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 
-import com.stuypulse.Constants;
-
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -64,6 +62,7 @@ public final class Window {
 
     // window utils
     private KeyTracker keys;
+    private Renderer renderer;
 
     public Window(String title, int width, int height) {
 
@@ -83,21 +82,46 @@ public final class Window {
 
         // make window context current
         glfwMakeContextCurrent(window);
-        glfwSwapInterval(1);
+        glfwSwapInterval(1); // vsync
 
+        GL.createCapabilities(); // allow opengl functions
+
+        // glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // white
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glfwShowWindow(window);
 
-        GL.createCapabilities();
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
+        // create renderer
+        this.renderer = new Renderer();
     }
 
+    public KeyTracker getKeys() {
+        return this.keys;
+    }
+
+    public Window draw(Mesh... meshes) {
+        this.renderer.load(meshes);
+        return this;
+    }
+
+    /*
+    Order is important:
+     - check for errors (idk if it even works)
+     - glClear(...)
+     - DRAW MESHES HERE
+     - swap buffers
+     - glfwPollEvents() (could technically go anywhere)
+     - check for keyinput (could technically go anywhere)
+    */
     public void update() {
-        if (keys.hasKey(GLFW_KEY_ESCAPE)) {
-            glfwSetWindowShouldClose(window, true);
+        int error = -1;
+        while ((error = glGetError()) != GL_NO_ERROR) {
+            System.out.println("There is an OpenGL error: " + error);
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        this.renderer.unload();
+
         glfwSwapBuffers(window);
 
         glfwPollEvents();
@@ -108,6 +132,10 @@ public final class Window {
     }
 
     public void close() {
+        glfwSetWindowShouldClose(window, true);
+    }
+
+    public void destroy() {
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
     }
