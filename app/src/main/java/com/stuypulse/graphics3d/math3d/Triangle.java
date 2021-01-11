@@ -1,7 +1,4 @@
-package com.stuypulse.graphics3d;
-
-import com.stuypulse.graphics3d.math3d.Vector3D;
-// import com.stuypulse.stuylib.math.SLMath;
+package com.stuypulse.graphics3d.math3d;
 
 public final class Triangle {
 

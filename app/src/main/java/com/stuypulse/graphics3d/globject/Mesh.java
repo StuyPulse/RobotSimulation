@@ -1,16 +1,16 @@
-package com.stuypulse.graphics3d;
+package com.stuypulse.graphics3d.globject;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-import com.stuypulse.graphics3d.math3d.Vector3D;
+import com.stuypulse.graphics3d.Window;
+import com.stuypulse.graphics3d.math3d.*;
 
-public final class Mesh {
+public final class Mesh implements GlObject {
     
     // Helper functions
-
     private static final float[] toArrayBuffer(Triangle[] triangles) {
         final int triangleSize = 9;
         float[] data = new float[triangles.length * triangleSize];
@@ -27,11 +27,6 @@ public final class Mesh {
         return data;
     }
 
-    // Generator functions
-    public static final Mesh of(Triangle... triangles) {
-        return new Mesh(triangles);
-    }
-
     // Rest of class
     private final int vertexArray;
     private final int vertexBuffer;
@@ -39,6 +34,9 @@ public final class Mesh {
     private final int count;
 
     public Mesh(Triangle... triangles) {
+        // Add to object manager
+        Window.addObject(this);
+
         this.count = triangles.length * 3; // a triangle contains 3 points
 
         vertexArray = glGenVertexArrays();
@@ -71,14 +69,10 @@ public final class Mesh {
     // test code
     protected void draw() {
         glBindVertexArray(vertexArray);
-		
-		// glEnableVertexAttribArray(0);
-		
-		glDrawArrays(GL_TRIANGLES, 0, count);
 
-		// glDisableVertexAttribArray(0);
-		
-		glBindVertexArray(0);
+		glDrawArrays(GL_TRIANGLES, 0, count);
+        
+        glBindVertexArray(0);
     }
 
 }

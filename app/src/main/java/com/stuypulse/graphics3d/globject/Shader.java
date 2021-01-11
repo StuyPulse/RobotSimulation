@@ -1,4 +1,4 @@
-package com.stuypulse.graphics3d;
+package com.stuypulse.graphics3d.globject;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -9,8 +9,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-// I don't really like this class 
-public final class Shader {
+import com.stuypulse.graphics3d.Window;
+
+public final class Shader implements GlObject {
 
     // Helpers
     private static final int createShader(String text, int type) {
@@ -76,7 +77,10 @@ public final class Shader {
     // Shader class
     private final int vertexShader, fragmentShader, program;
 
+    // private final int uProject, uWorld, uCamera;
+
     private Shader(String vertexText, String fragText) {
+        Window.addObject(this);
 
         vertexShader = createShader(vertexText, GL_VERTEX_SHADER);
         fragmentShader = createShader(fragText, GL_FRAGMENT_SHADER);
@@ -91,8 +95,10 @@ public final class Shader {
         glValidateProgram(program);
         handleProgramError(program, GL_VALIDATE_STATUS);
 
-        // hmmm...
-        // glUseProgram(program);
+        // TODO: check if set to -1
+        // uProject = glGetUniformLocation(program, "projection"); 
+        // uWorld = glGetUniformLocation(program, "world");
+        // uCamera = glGetUniformLocation(program, "camera");
     }
 
     protected void use() {

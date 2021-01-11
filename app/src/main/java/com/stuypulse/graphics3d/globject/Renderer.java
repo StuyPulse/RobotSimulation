@@ -1,26 +1,24 @@
-package com.stuypulse.graphics3d;
+package com.stuypulse.graphics3d.globject;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 public final class Renderer {
     
-    /*
-    TODO: incorporate a Shader into the renderer
-    */
-
-    // private Shader shader;
+    private Shader shader;
 
     private final Queue<Mesh> meshes;
 
     public Renderer() {
+        this.shader = null;
+
         this.meshes = new LinkedList<>();
     }
 
-    // public Renderer useShader(Shader shader) {
-    //     this.shader = shader;
-    //     return this;
-    // }
+    public Renderer setShader(Shader shader) {
+        this.shader = shader;
+        return this;
+    }
 
     public Renderer load(Mesh... newMeshes) {
         
@@ -33,8 +31,8 @@ public final class Renderer {
 
     public void unload() {
 
-        // if (shader != null)
-            // shader.use();
+        if (shader != null)
+            shader.use();
 
         Mesh head = null;
         while ((head = this.meshes.poll()) != null) {

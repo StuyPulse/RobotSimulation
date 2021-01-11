@@ -9,15 +9,19 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import com.stuypulse.graphics3d.globject.*;
+
 // import java.nio.*;
 // import org.lwjgl.system.*;
 // import static org.lwjgl.system.MemoryStack.*;
 
-public final class Window {
+public final class Window implements GlObject{
     
     /**
      * SETUP AND CLEANUP FOR GLFW AND OPENGL
      */
+    private static GlObject.Manager MANAGER = new GlObject.Manager();
+
     public static void initialize() {
         // often suggested to run this from the main thread
         System.out.println("LWJGL " + Version.getVersion());
@@ -34,24 +38,21 @@ public final class Window {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // resizable
     }
 
+    public static void addObject(GlObject object) {
+        MANAGER.addObject(object);
+    }
+    
     public static void terminate() {
-        System.out.println("Attempting to terminate LWJGL");
+
+        System.out.println("Attempting to clear GlObject manager...");
+
+        MANAGER.destroy();
+
+        System.out.println("Attempting to terminate LWJGL...");
 
         glfwTerminate();
         glfwSetErrorCallback(null).free();
     }
-
-    /*
-    Maybe: 
-    have a static list of windows that are handled by Window.terminate()
-    */
-
-    /*
-    // is this a good idea
-    static {
-        initialize();
-    }
-    */
 
     /**
      * REST OF WINDOW CLASS
@@ -65,6 +66,7 @@ public final class Window {
     private Renderer renderer;
 
     public Window(String title, int width, int height) {
+        Window.addObject(this);
 
         // create window
         this.window = glfwCreateWindow(width, height, title, NULL, NULL);
@@ -103,6 +105,11 @@ public final class Window {
         return this;
     }
 
+    public Window setShader(Shader shader) {
+        this.renderer.setShader(shader);
+        return this;
+    }
+
     /*
     Order is important:
      - check for errors (idk if it even works)
@@ -138,6 +145,10 @@ public final class Window {
     public void destroy() {
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
+    }
+    
+    public int getOrder() {
+        return 1_000; // just to be safe
     }
 
 }

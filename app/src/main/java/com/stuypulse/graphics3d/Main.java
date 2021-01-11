@@ -1,14 +1,16 @@
 package com.stuypulse.graphics3d;
 
 import static com.stuypulse.Constants.WindowSettings.*;
-
 import static org.lwjgl.glfw.GLFW.*;
 
+import com.stuypulse.graphics3d.globject.*;
+import com.stuypulse.graphics3d.math3d.*;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
+
+// import static org.lwjgl.opengl.GL11.*;
+// import static org.lwjgl.opengl.GL15.*;
+// import static org.lwjgl.opengl.GL20.*;
+// import static org.lwjgl.opengl.GL30.*;
 
 
 public class Main {
@@ -25,12 +27,20 @@ public class Main {
         Mesh mesh = new Mesh(
             new Triangle(
                 -1.0, -1.0, +0.0, 
-                +0.0, +1.0, +0.0, 
-                +1.0, -1.0, +0.0
+                -1.0, +1.0, +0.0, 
+                +1.0, +1.0, +0.0
             )
         );
 
-        Shader shader = Shader.fromFiles("./app/src/main/resources/basic");
+        window.setShader(Shader.fromFiles(
+            "./app/src/main/resources/basic.vs",
+            "./app/src/main/resources/basic.fs"
+        ));
+
+        // Shader shader = Shader.fromFiles(
+        //     "./app/src/main/resources/basic.vs",
+        //     "./app/src/main/resources/basic.fs"
+        // );
 
         System.out.println("Starting window...");
 
@@ -50,11 +60,6 @@ public class Main {
             Thread.sleep(20);
         }
         
-        shader.destroy();
-        mesh.destroy();
-
-        window.destroy();
-
         System.out.println("...Closing window");
 
         Window.terminate();
