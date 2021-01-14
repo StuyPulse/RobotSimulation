@@ -9,21 +9,19 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import java.util.*;
+
 import com.stuypulse.graphics3d.globject.*;
 
-// import java.nio.*;
-// import org.lwjgl.system.*;
-// import static org.lwjgl.system.MemoryStack.*;
-
-public final class Window implements GlObject{
+public class Window implements GlObject{
     
-    /**
-     * SETUP AND CLEANUP FOR GLFW AND OPENGL
-     */
-    private static GlObject.Manager MANAGER = new GlObject.Manager();
+    /******************************
+     * MEMORY AND GLFW MANAGEMENT *
+     ******************************/
+
+    private static List<GlObject> MANAGER = new LinkedList<>();
 
     public static void initialize() {
-        // often suggested to run this from the main thread
         System.out.println("LWJGL " + Version.getVersion());
 
         GLFWErrorCallback.createPrint(System.err).set();
@@ -32,21 +30,22 @@ public final class Window implements GlObject{
             throw new IllegalStateException("Could not initialize GLFW!");
         }
 
-        glfwDefaultWindowHints(); // the current window hints are already the default
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // don't become visible until done configuring
-        //glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // resizable
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // resizable
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     }
 
     public static void addObject(GlObject object) {
-        MANAGER.addObject(object);
+        MANAGER.add(object);
     }
     
     public static void terminate() {
+        System.out.println("Attempting to free GlObjects...");
 
-        System.out.println("Attempting to clear GlObject manager...");
-
-        MANAGER.destroy();
+        Collections.sort(MANAGER);
+        for (GlObject obj : MANAGER) {
+            obj.destroy();
+        }
 
         System.out.println("Attempting to terminate LWJGL...");
 
@@ -54,9 +53,9 @@ public final class Window implements GlObject{
         glfwSetErrorCallback(null).free();
     }
 
-    /**
-     * REST OF WINDOW CLASS
-     */
+    /****************************
+     * REST OF THE WINDOW CLASS *
+     ****************************/
 
     // glfw window pointer
     private final long window;
@@ -92,12 +91,18 @@ public final class Window implements GlObject{
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glfwShowWindow(window);
 
+        glEnable(GL_DEPTH_TEST);
+
         // create renderer
         this.renderer = new Renderer();
     }
 
     public KeyTracker getKeys() {
         return this.keys;
+    }
+
+    public Camera getCamera() {
+        return this.renderer.getCamera();
     }
 
     public Window draw(Mesh... meshes) {

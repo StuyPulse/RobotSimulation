@@ -1,37 +1,8 @@
 package com.stuypulse.graphics3d.globject;
 
-import java.util.*;
-
 public interface GlObject extends Comparable<GlObject> {
    
-    /***********************
-     * GlObject MANAGEMENT *
-     ***********************/
-
-    final class Manager {
-        private final List<GlObject> objects;
-        
-        public Manager() {
-            this.objects = new ArrayList<>();
-        }
-
-        public void addObject(GlObject toAdd) {
-            this.objects.add(toAdd);
-        }
-
-        public void destroy() {
-            Collections.sort(objects);
-            for (GlObject obj : objects) {
-                obj.destroy();
-            }
-        }
-    }
-
-    /**********************
-     * GlObject INTERFACE *
-     **********************/
-
-    public void destroy();
+    void destroy();
 
     /**
      * A higher order GlObject will be destroyed later
