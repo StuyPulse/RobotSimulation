@@ -1,4 +1,4 @@
-package com.stuypulse.graphics3d.globject;
+package com.stuypulse.graphics3d.render;
 
 import java.util.LinkedList;
 import java.util.Queue;

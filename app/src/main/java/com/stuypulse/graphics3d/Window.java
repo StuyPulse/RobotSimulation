@@ -11,7 +11,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 import java.util.*;
 
-import com.stuypulse.graphics3d.globject.*;
+import com.stuypulse.graphics3d.render.*;
 
 public class Window implements GlObject{
     

@@ -3,9 +3,9 @@ package com.stuypulse.graphics3d;
 import static com.stuypulse.Constants.WindowSettings.*;
 import static org.lwjgl.glfw.GLFW.*;
 
-import com.stuypulse.graphics3d.globject.Mesh;
-import com.stuypulse.graphics3d.globject.Shader;
 import com.stuypulse.graphics3d.math3d.Triangle;
+import com.stuypulse.graphics3d.render.Mesh;
+import com.stuypulse.graphics3d.render.Shader;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.util.StopWatch;
 

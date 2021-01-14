@@ -1,4 +1,4 @@
-package com.stuypulse.graphics3d.globject;
+package com.stuypulse.graphics3d.render;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
