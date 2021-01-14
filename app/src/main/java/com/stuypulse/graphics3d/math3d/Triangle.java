@@ -1,5 +1,7 @@
 package com.stuypulse.graphics3d.math3d;
 
+import org.joml.Vector3f;
+
 public final class Triangle {
 
     /*
@@ -14,10 +16,10 @@ public final class Triangle {
      * public final Vector3D color;
      */
 
-    public final Vector3D[] points;
+    public final Vector3f[] points;
 
-    public Triangle(Vector3D first, Vector3D second, Vector3D third) {
-        this.points = new Vector3D[] {
+    public Triangle(Vector3f first, Vector3f second, Vector3f third) {
+        this.points = new Vector3f[] {
             first,
             second,
             third
@@ -25,14 +27,14 @@ public final class Triangle {
     }
 
     public Triangle(
-        double a, double b, double c,
-        double d, double e, double f,
-        double g, double h, double i
+        float a, float b, float c,
+        float d, float e, float f,
+        float g, float h, float i
     ) {
         this(
-            new Vector3D(a, b, c),
-            new Vector3D(d, e, f),
-            new Vector3D(g, h, i)
+            new Vector3f(a, b, c),
+            new Vector3f(d, e, f),
+            new Vector3f(g, h, i)
         );
     }
 

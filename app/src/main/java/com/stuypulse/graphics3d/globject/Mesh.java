@@ -8,6 +8,8 @@ import static org.lwjgl.opengl.GL30.*;
 import com.stuypulse.graphics3d.Window;
 import com.stuypulse.graphics3d.math3d.*;
 
+import org.joml.Vector3f;
+
 public final class Mesh implements GlObject {
     
     // Helper functions
@@ -17,10 +19,10 @@ public final class Mesh implements GlObject {
         int top = 0;
 
         for (Triangle triangle : triangles) {
-            for (Vector3D point : triangle.points) {
-                data[top++] = (float) point.x;
-                data[top++] = (float) point.y;
-                data[top++] = (float) point.z;
+            for (Vector3f point : triangle.points) {
+                data[top++] = point.x;
+                data[top++] = point.y;
+                data[top++] = point.z;
             }
         }
 

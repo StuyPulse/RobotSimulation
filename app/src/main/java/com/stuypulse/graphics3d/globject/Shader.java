@@ -1,15 +1,15 @@
 package com.stuypulse.graphics3d.globject;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
 import com.stuypulse.graphics3d.Window;
+
+import org.joml.Matrix4f;
 
 public final class Shader implements GlObject {
 
@@ -55,8 +55,25 @@ public final class Shader implements GlObject {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+      
         }
     } 
+
+    private static final int setupUniform(int program, String name) {
+        int uniformPtr = glGetUniformLocation(program, name); 
+        
+        if (uniformPtr == -1) {
+            throw new IllegalStateException("Unable to get uniform location (-1) for " + name + " in program (" + program + ")");
+        }
+
+        return uniformPtr;
+    }
+
+    private static final float[] getFloatsFromMat(Matrix4f in) {
+        float[] out = new float[16];
+        in.get(out);
+        return out;
+    }
 
     // Constructors
     public static final Shader fromFiles(String vPath, String fPath) {
@@ -77,7 +94,7 @@ public final class Shader implements GlObject {
     // Shader class
     private final int vertexShader, fragmentShader, program;
 
-    // private final int uProject, uWorld, uCamera;
+    private final int uProject, uTransform, uCamera;
 
     private Shader(String vertexText, String fragText) {
         Window.addObject(this);
@@ -95,14 +112,9 @@ public final class Shader implements GlObject {
         glValidateProgram(program);
         handleProgramError(program, GL_VALIDATE_STATUS);
 
-        // TODO: check if set to -1
-        // uProject = glGetUniformLocation(program, "projection"); 
-        // uWorld = glGetUniformLocation(program, "world");
-        // uCamera = glGetUniformLocation(program, "camera");
-    }
-
-    protected void use() {
-        glUseProgram(program);
+        uProject = setupUniform(program, "projection");
+        uTransform = setupUniform(program, "transform");
+        uCamera = setupUniform(program, "view");
     }
 
     public void destroy() {
@@ -111,6 +123,39 @@ public final class Shader implements GlObject {
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         glDeleteProgram(program);
+    }
+
+    // Setup Shader
+
+
+    // made for testing
+    private final static boolean TRANSPOSE = false;
+
+    protected void useCamera(Camera camera) {
+        glUniformMatrix4fv(
+            uProject, 
+            TRANSPOSE, 
+            getFloatsFromMat(camera.getProjection())
+        );
+
+        glUniformMatrix4fv(
+            uCamera, 
+            TRANSPOSE, 
+            getFloatsFromMat(camera.getView())
+        );
+    }
+    
+    // add transform class later
+    protected void useTransform() {
+        glUniformMatrix4fv(
+            uTransform,
+            TRANSPOSE,
+            getFloatsFromMat(new Matrix4f().identity())
+        );
+    }
+
+    protected void use() {
+        glUseProgram(program);
     }
 
 }
