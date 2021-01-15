@@ -5,8 +5,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import com.stuypulse.graphics3d.math3d.Triangle;
 import com.stuypulse.graphics3d.render.Mesh;
-import com.stuypulse.graphics3d.render.RenderObject;
 import com.stuypulse.graphics3d.render.Shader;
+import com.stuypulse.graphics3d.render.Transform;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.util.StopWatch;
@@ -60,8 +60,7 @@ public class Main {
 
         Mesh CUBE_MESH = new Mesh(CUBE_TRIANGLES);
 
-        RenderObject cube = new RenderObject(CUBE_MESH);
-        cube.getTransform().setY(0.5f);
+        Transform cube = new Transform();
 
         Shader shader = Shader.fromFiles(
             "./app/src/main/resources/basic"
@@ -77,9 +76,13 @@ public class Main {
             final double dt = timer.reset();
             accumulatedTime += dt;
 
-            // DRAW TO THE SCREEN
-            window.draw(cube);
-            window.update();
+            // DRAWING LOOP
+            window.clear();
+
+            window.draw(CUBE_MESH, cube);
+
+            window.swapBuffers();
+            window.pollEvents();
 
             // KEY INPUT
             final var keys = window.getKeys();
@@ -122,7 +125,7 @@ public class Main {
             )));
 
             // TEST OBJECT MOVEMENT
-            cube.getTransform().setX((float) (Math.sin(accumulatedTime) * 3));
+            cube.setX((float) (Math.sin(accumulatedTime) * 3));
 
             mouse.setPosition(WIDTH / 2, HEIGHT / 2);
             Thread.sleep(20);

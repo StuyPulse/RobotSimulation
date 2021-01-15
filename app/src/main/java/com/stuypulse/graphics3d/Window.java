@@ -1,5 +1,6 @@
 package com.stuypulse.graphics3d;
 
+import org.joml.Vector3f;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -12,6 +13,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 import java.util.*;
 
 import com.stuypulse.graphics3d.render.*;
+import com.stuypulse.stuylib.math.Angle;
 
 public class Window implements GlObject{
     
@@ -99,8 +101,19 @@ public class Window implements GlObject{
         // glDepthFunc(GL_LESS); // <-- default
 
         // create renderer
-        this.renderer = new Renderer();
+        this.renderer = new Renderer(new Camera(
+            new Vector3f(0),
+            Angle.kZero, Angle.kZero, Angle.kZero,
+            width, height,
+            Angle.k90deg, 
+            0.01f, 
+            1000.0f
+        ));
     }
+
+    /***********
+     * GETTERS *
+     ***********/
 
     public KeyTracker getKeys() {
         return this.keys;
@@ -114,47 +127,63 @@ public class Window implements GlObject{
         return this.renderer.getCamera();
     }
 
-    public Window draw(RenderObject... objects) {
-        this.renderer.load(objects);
-        return this;
+    public boolean isOpen() {
+        return !glfwWindowShouldClose(window);
     }
+
+    /*********************
+     * WINDOW OPERATIONS *
+     *********************/
 
     public Window setShader(Shader shader) {
         this.renderer.setShader(shader);
         return this;
     }
 
-    /*
-    Order is important:
-     - check for errors (idk if it even works)
-     - glClear(...)
-     - DRAW MESHES HERE
-     - swap buffers
-     - glfwPollEvents() (could technically go anywhere)
-     - check for keyinput (could technically go anywhere)
-    */
-    public void update() {
-        int error = -1;
-        while ((error = glGetError()) != GL_NO_ERROR) {
-            System.out.println("There is an OpenGL error: " + error);
-        }
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        this.renderer.unload();
-
-        glfwSwapBuffers(window);
-
-        glfwPollEvents();
-    }
-
-    public boolean isOpen() {
-        return !glfwWindowShouldClose(window);
-    }
-
     public void close() {
         glfwSetWindowShouldClose(window, true);
     }
+
+    public void pollErrors() {
+        int error = -1;
+        while ((error = glGetError()) != GL_NO_ERROR) {
+            throw new IllegalStateException("There is an OpenGL error: " + error);
+        }
+    }
+
+    public void clear() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    public void clear(float r, float g, float b, float a) {
+        glClearColor(r, g, b, a);
+        this.clear();
+    }
+
+    public void clear(float r, float g, float b) {
+        this.clear(r, g, b, 1);
+    }
+
+    public Window draw(Mesh mesh, Transform transform) {
+        // I dont like the fact that it's necessary 
+        // to update a camera uniform on every draw
+        this.renderer.updateCamera();
+        this.renderer.setTransform(transform);
+        this.renderer.draw(mesh);
+        return this;
+    }
+
+    public void swapBuffers() {
+        glfwSwapBuffers(this.window);
+    }
+
+    public void pollEvents() {
+        glfwPollEvents();
+    }
+
+    /*********************
+     * MEMORY MANAGEMENT *
+     *********************/
 
     public void destroy() {
         glfwFreeCallbacks(window);

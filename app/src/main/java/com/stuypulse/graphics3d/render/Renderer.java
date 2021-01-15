@@ -1,65 +1,43 @@
 package com.stuypulse.graphics3d.render;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
-import com.stuypulse.stuylib.math.Angle;
-
-import org.joml.Vector3f;
-
+// Small struct wrapper for a shader and a drawing function
+// just so that the window doesnt contain a shader, camera, etc.
 public final class Renderer {
     
-    private Camera camera;
-
     private Shader shader;
 
-    private final Queue<RenderObject> objects;
+    private Camera camera;
 
-    public Renderer() {
-        this.camera = new Camera(
-            new Vector3f(0,0,3),
-            Angle.kZero, Angle.kZero, Angle.kZero,
-            640, 640, 
-            Angle.k90deg, 
-            0.01f, 1000.0f
-        );
-
+    public Renderer(Camera camera) {
         this.shader = null;
-
-        this.objects = new LinkedList<>();
+        this.camera = camera;
     }
 
     public Camera getCamera() {
-        return this.camera;
+        return camera;
     }
 
     public Renderer setShader(Shader shader) {
         this.shader = shader;
-        return this;
-    }
-
-    public Renderer load(RenderObject... newObjects) {
-        
-        for (RenderObject m : newObjects) {
-            this.objects.add(m);
-        }
-        return this;
-        
-    }
-
-    public void unload() {
-
-        if (shader != null) {
+        if (shader != null)
             shader.use();
-            shader.useCamera(this.camera);
-        }
+        return this;
+    }
 
-        RenderObject head = null;
-        while ((head = this.objects.poll()) != null) {
-            shader.useTransform(head.getTransform());
-            head.getMesh().draw();
-        }
-        
+    public Renderer updateCamera() {
+        if (shader != null)
+            shader.useCamera(camera);
+        return this;
+    }
+
+    public Renderer setTransform(Transform transform) {
+        if (shader != null)
+            shader.useTransform(transform);
+        return this;
+    }
+
+    public void draw(Mesh mesh) {
+        mesh.draw();
     }
 
 }
