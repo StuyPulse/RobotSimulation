@@ -62,6 +62,7 @@ public class Window implements GlObject{
 
     // window utils
     private KeyTracker keys;
+    private MouseTracker mouse;
     private Renderer renderer;
 
     public Window(String title, int width, int height) {
@@ -76,6 +77,9 @@ public class Window implements GlObject{
         // create key callback
         this.keys = new KeyTracker(this.window);
         glfwSetKeyCallback(this.window, this.keys);
+
+        // create mouse
+        this.mouse = new MouseTracker(this.window);
 
         // center window 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -92,6 +96,7 @@ public class Window implements GlObject{
         glfwShowWindow(window);
 
         glEnable(GL_DEPTH_TEST);
+        // glDepthFunc(GL_LESS); // <-- default
 
         // create renderer
         this.renderer = new Renderer();
@@ -101,12 +106,16 @@ public class Window implements GlObject{
         return this.keys;
     }
 
+    public MouseTracker getMouse() {
+        return this.mouse;
+    }
+
     public Camera getCamera() {
         return this.renderer.getCamera();
     }
 
-    public Window draw(Mesh... meshes) {
-        this.renderer.load(meshes);
+    public Window draw(RenderObject... objects) {
+        this.renderer.load(objects);
         return this;
     }
 
