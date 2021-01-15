@@ -3,13 +3,10 @@ package com.stuypulse.robot.subsystems;
 import com.stuypulse.stuylib.math.*;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.stream.Collectors;
 
-import com.stuypulse.graphics.Line;
 import com.stuypulse.physics.Force;
 import com.stuypulse.robot.subsystems.components.SwerveModule;
-import com.stuypulse.robot.subsystems.components.Wheel;
 
 /**
  * This is an implementation of SwerveDrive for this simulation.
@@ -86,32 +83,6 @@ public class SwerveDrive implements Drivetrain {
                 .collect(Collectors.toList())
                 .toArray(new Force[0])
         );
-    }
-
-    /**
-     * This is some messy code for drawing the SwerveDrive
-     * The reason its messy is because it has to draw each wheel
-     */
-    public Line[] getMesh() {
-        double wheelSize = 0.4;
-
-        LinkedList<Line> lines = new LinkedList<>();
-        
-        for(int i = 0; i < modules.length; ++i) {
-            lines.push(new Line(
-                modules[(i + 0) % modules.length].getPosition(), 
-                modules[(i + 1) % modules.length].getPosition()
-            ));
-        }
-        
-        for(Wheel w : modules) {
-            lines.push(new Line(
-                w.getPosition().add(w.getAngle().getVector().mul(wheelSize)), 
-                w.getPosition().sub(w.getAngle().getVector().mul(wheelSize))
-            ));
-        }
-        
-        return lines.toArray(new Line[0]);
     }
 
 }

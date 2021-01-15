@@ -1,6 +1,7 @@
 
 
 import com.stuypulse.graphics.Graphics;
+import com.stuypulse.graphics3d.Window;
 import com.stuypulse.robot.*;
 import com.stuypulse.robot.subsystems.*;
 
@@ -13,14 +14,16 @@ import myrobots.*;
 public class Main {
 
     public static Robot<?>[] robots = new Robot<?>[]{
-        //new Edwin(),
+        new Edwin(),
         new JeremyBot(),
     };
 
     public static void main(String[] args) throws Exception {
+        Window.initialize();
+
         Graphics g = new Graphics().addRobot(robots);
 
-        while(true) {
+        while(g.isOpen()) {
             for(Robot<?> r : robots) {
                 r.periodic();
             }
@@ -29,5 +32,6 @@ public class Main {
             Thread.sleep(10);
         }
 
+        Window.terminate();
     }
 }

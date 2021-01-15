@@ -9,14 +9,14 @@ import org.joml.Vector3f;
 // that can be applied to a  mesh
 public final class Transform {
     
-    // TODO: consider adding scale
-
     private Vector3f translation;
     private Angle pitch, yaw, roll; 
 
     private Vector3f scale; 
 
     private Matrix4f transform;
+
+    private boolean centered;
 
     public Transform(
         Vector3f translation,
@@ -30,6 +30,8 @@ public final class Transform {
         this.scale = new Vector3f(1f);
 
         this.transform = null;
+        
+        this.centered = false;
     }
 
     public Transform(
@@ -47,16 +49,28 @@ public final class Transform {
         this(new Vector3f(0));
     }
 
-    protected Matrix4f getTransform() {
-        return transform != null ?
-            transform :
-            (transform = new Matrix4f()
+    private Matrix4f calculateTransform() {
+        if (centered) {
+            return new Matrix4f()
+                .translate(translation)
                 .scale(scale)
+                .rotate((float) yaw.toRadians(), 1, 0, 0)
+                .rotate((float) pitch.toRadians(), 0, 1, 0)
+                .rotate((float) roll.toRadians(), 0, 0, 1);
+        } else {
+            return new Matrix4f()
                 .rotate((float) yaw.toRadians(), 1, 0, 0)
                 .rotate((float) pitch.toRadians(), 0, 1, 0)
                 .rotate((float) roll.toRadians(), 0, 0, 1)
                 .translate(translation)
-            );
+                .scale(scale);
+        }
+    }
+
+    protected Matrix4f getTransform() {
+        return transform != null ?
+            transform :
+            (transform = calculateTransform());
     }
 
     // Setters
@@ -108,6 +122,12 @@ public final class Transform {
         return this;
     }
 
+    public Transform setCentered(boolean isCentered) {
+        this.centered = isCentered;
+        this.transform = null;
+        return this;
+    }
+
     // Getters
     public Vector3f getTranslation() {
         return translation;
@@ -151,6 +171,10 @@ public final class Transform {
 
     public float getScaleZ() {
         return this.scale.z;
+    }
+
+    public boolean isCentered() {
+        return centered;
     }
 
 }

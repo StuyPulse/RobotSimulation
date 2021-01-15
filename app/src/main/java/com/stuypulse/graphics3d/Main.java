@@ -26,7 +26,7 @@ public class Main {
     // because the mesh cannot be created statically
     // (a singleton function can be used to only initialize a mesh at runtime if it starts out as null)
     // TODO: replace with vertex buffer and using index pools
-    private final static Triangle[] CUBE_TRIANGLES = {
+    public final static Triangle[] CUBE_TRIANGLES = {
         new Triangle(-0.5f, -0.5f, -0.5f, /**/ -0.5f, 0.5f, -0.5f, /**/ 0.5f, 0.5f, -0.5f),
         new Triangle(-0.5f, -0.5f, -0.5f, /**/ 0.5f, 0.5f, -0.5f, /**/ 0.5f, -0.5f, -0.5f),
 

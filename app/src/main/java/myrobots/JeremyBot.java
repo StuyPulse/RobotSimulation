@@ -8,7 +8,6 @@ import com.stuypulse.stuylib.streams.filters.LowPassFilter;
 import com.stuypulse.stuylib.control.*;
 import com.stuypulse.robot.subsystems.*;
 import com.stuypulse.robot.subsystems.components.Wheel;
-import com.stuypulse.graphics.StdDraw;
 import com.stuypulse.robot.*;
 /*************************************************/
 
@@ -44,17 +43,10 @@ public class JeremyBot extends Robot<SwerveDrive> {
         Vector2D direction = new Vector2D(0.0, 0.0);
         double turn = 0;
 
-        // This code just follows the mouse and spins when the moust is down
-        Vector2D target = new Vector2D(StdDraw.mouseX(), StdDraw.mouseY());
-        direction = target.sub(position.mul(kP).add(velocity.mul(kD)));
-        if(direction.magnitude() < 0.05) {
-            direction = direction.mul(0.0);
-        }
+        // SWERVE MOVEMEMNT HERE
+        direction = direction.add(new Vector2D(1,0));
+        turn = 0.25;
 
-        if(StdDraw.isMousePressed()) {
-            turn = 0.75;
-        }
-        
         // Makes the control field centric
         direction = direction.rotate(Angle.kZero.sub(angle));
 

@@ -1,31 +1,61 @@
 package com.stuypulse.graphics;
 
-import com.stuypulse.physics.Position;
+import static com.stuypulse.Constants.WindowSettings.*;
+import static com.stuypulse.Constants.CameraSettings.*;
+
+import com.stuypulse.graphics3d.Main;
+import com.stuypulse.graphics3d.math3d.Triangle;
+import com.stuypulse.graphics3d.*;
+import com.stuypulse.graphics3d.render.*;
+
 import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.subsystems.Drivetrain;
 import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.math.Vector2D;
+import com.stuypulse.stuylib.util.StopWatch;
+
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.LinkedList;
 
-/**
- * TODO: reprogram this graphics engine, it is not upto the standards that we want
- * 
- * This class is a super simple way to draw all the robots in the simulation
- */
-public class Graphics {
+public final class Graphics {
 
+    public final static Triangle[] CUBE_TRIANGLES =
+        Main.CUBE_TRIANGLES; // eventually move the cube triangles into here
 
-    List<Robot<?>> robots;
+    private final static void setupCamera(Camera camera) {
+        camera.setFov(FOV);
+        camera.setPosition(POSITION);
+        camera.setFarPlane(FAR_PLANE);
+        camera.setNearPlane(NEAR_PLANE);
+        camera.setPitch(PITCH);
+        camera.setYaw(YAW);
+        camera.setRoll(ROLL);
+    }
+
+    private final List<Robot<?>> robots;
     
+    // Graphics Library
+    private Window window;
+    private StopWatch timer;
+
     public Graphics() {
-        robots = new LinkedList<>();
+        this.robots = new LinkedList<>();
 
-        StdDraw.setCanvasSize(720, 720);
+        // Graphics stuff
+        this.timer = new StopWatch();
 
-        StdDraw.setXscale(-10, 10);
-        StdDraw.setYscale(-10, 10);
+        this.window = new Window(
+            TITLE,
+            WIDTH,
+            HEIGHT
+        );
+
+        this.window.setShader(Shader.fromFiles(SHADER));
+        this.window.getMouse().setVisible(false);
+
+        setupCamera(this.window.getCamera());
     }
 
     public Graphics addRobot(Robot<?>... rs) {
@@ -35,31 +65,82 @@ public class Graphics {
         return this;
     }
 
-    public void line(Vector2D a, Vector2D b) {
-        StdDraw.line(a.x,a.y,b.x,b.y);
+    public void drawRobot(Robot<?> r) {
+        final Vector2D pos = r.getPosition();
+        final Angle angle = r.getAngle();
+
+        window.draw(
+            r.getDrivetrain().getMesh(), 
+            // do this to avoid creating a joml.Vector3f
+            new Transform()
+                .setCentered(r.getDrivetrain().isCentered())
+                .setPitch(angle)
+                .setX((float) pos.x)
+                .setZ((float) pos.y)
+        );
+
     }
 
-
-    public void drawRobot(Robot<?> r) {
-        StdDraw.setPenColor(r.getColor());
-        Vector2D pos = r.getPosition();
-        Angle ang = r.getAngle();
-        Line[] mesh = r.getDrivetrain().getMesh();
-
-        for(Line l : mesh) {
-            l.transform(pos, ang).draw();
-        }
+    public boolean isOpen() {
+        return window.isOpen();
     }
 
     public void periodic() {
-        StdDraw.enableDoubleBuffering();
-        StdDraw.clear();
+        // PERIODIC LOOP
+        window.clear();
 
         for(Robot<?> r : robots) {
             drawRobot(r);
         }
 
-        StdDraw.show();
+        window.swapBuffers();
+        window.pollEvents();
+
+        // KEY INPUT
+        final double dt = timer.reset();
+
+        final var keys = window.getKeys();
+        final var camera = window.getCamera();
+        final var mouse = window.getMouse();
+
+        if (keys.hasKey(EXIT)) {
+            window.close();
+        }
+
+        // CAMERA MOVEMENT
+        final float speed = keys.hasKey(SPEED_UP) ? FAST_SPEED : SLOW_SPEED;
+
+        float yDir = speed * (float)(dt) *
+            ((keys.hasKey(UP) ? 1 : 0) - (keys.hasKey(DOWN) ? 1 : 0));
+        float zDir = speed * (float)(dt) * 
+            ((keys.hasKey(BACK) ? 1 : 0) - (keys.hasKey(FORWARD) ? 1 : 0));
+        float xDir = speed * (float)(dt) *
+            ((keys.hasKey(RIGHT) ? 1 : 0) - (keys.hasKey(LEFT) ? 1 : 0));
+
+        Vector3f dir = new Vector3f(xDir, yDir, zDir);
+        float yAngle = (float) (camera.getPitch().toRadians());
+
+        camera.setPosition(camera.getPosition().add(dir.rotateY(yAngle)));
+
+        // CAMERA ROTATION
+        final var delta = mouse.getDelta();
+    
+        final double MAX_ANGLE = Math.PI / 2.0;
+
+        float pitch = -SENSITIVITY_X * (float)(dt) *
+            (delta.x / (WIDTH / 2f));
+
+        float yaw = -SENSITIVITY_Y * (float)(dt) *
+            (delta.y / (HEIGHT / 2f));
+
+        camera.setPitch(Angle.fromRadians(camera.getPitch().toRadians() + pitch));
+        camera.setYaw(Angle.fromRadians(SLMath.limit(
+            camera.getYaw().toRadians() + yaw, 
+            -MAX_ANGLE, 
+            MAX_ANGLE
+        )));
+
+        mouse.setPosition(WIDTH / 2, HEIGHT / 2);
     }
 
 }
