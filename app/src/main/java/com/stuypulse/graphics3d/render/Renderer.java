@@ -13,7 +13,7 @@ public final class Renderer {
 
     private Shader shader;
 
-    private final Queue<Mesh> meshes;
+    private final Queue<RenderObject> objects;
 
     public Renderer() {
         this.camera = new Camera(
@@ -26,7 +26,7 @@ public final class Renderer {
 
         this.shader = null;
 
-        this.meshes = new LinkedList<>();
+        this.objects = new LinkedList<>();
     }
 
     public Camera getCamera() {
@@ -38,10 +38,10 @@ public final class Renderer {
         return this;
     }
 
-    public Renderer load(Mesh... newMeshes) {
+    public Renderer load(RenderObject... newObjects) {
         
-        for (Mesh m : newMeshes) {
-            this.meshes.add(m);
+        for (RenderObject m : newObjects) {
+            this.objects.add(m);
         }
         return this;
         
@@ -52,12 +52,12 @@ public final class Renderer {
         if (shader != null) {
             shader.use();
             shader.useCamera(this.camera);
-            shader.useTransform(/**/);
         }
 
-        Mesh head = null;
-        while ((head = this.meshes.poll()) != null) {
-            head.draw();
+        RenderObject head = null;
+        while ((head = this.objects.poll()) != null) {
+            shader.useTransform(head.getTransform());
+            head.getMesh().draw();
         }
         
     }

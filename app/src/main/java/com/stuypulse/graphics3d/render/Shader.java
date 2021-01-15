@@ -146,11 +146,11 @@ public final class Shader implements GlObject {
     }
     
     // add transform class later
-    protected void useTransform() {
+    protected void useTransform(Transform transform) {
         glUniformMatrix4fv(
             uTransform,
             TRANSPOSE,
-            getFloatsFromMat(new Matrix4f().identity())
+            getFloatsFromMat(transform.getTransform())
         );
     }
 
