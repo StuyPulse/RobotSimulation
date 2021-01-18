@@ -24,6 +24,18 @@ public final class Renderer {
         return this;
     }
 
+    public Renderer setColor(float r, float g, float b, float a) {
+        if (shader != null)
+            shader.setColor(r,g,b,a);
+        return this;
+    }
+
+    public Renderer setColor(int r, int g, int b, int a) {
+        if (shader != null)
+            shader.setColor(r,g,b,a);
+        return this;
+    }
+
     public Renderer updateCamera() {
         if (shader != null)
             shader.useCamera(camera);

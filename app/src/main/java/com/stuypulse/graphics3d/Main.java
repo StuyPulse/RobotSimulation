@@ -26,25 +26,27 @@ public class Main {
     // because the mesh cannot be created statically
     // (a singleton function can be used to only initialize a mesh at runtime if it starts out as null)
     // TODO: replace with vertex buffer and using index pools
-    public final static Triangle[] CUBE_TRIANGLES = {
-        new Triangle(-0.5f, -0.5f, -0.5f, /**/ -0.5f, 0.5f, -0.5f, /**/ 0.5f, 0.5f, -0.5f),
-        new Triangle(-0.5f, -0.5f, -0.5f, /**/ 0.5f, 0.5f, -0.5f, /**/ 0.5f, -0.5f, -0.5f),
+    public final static Triangle[] CUBE_TRIANGLES =
+        null;
+    // {
+    //     new Triangle(-0.5f, -0.5f, -0.5f, /**/ -0.5f, 0.5f, -0.5f, /**/ 0.5f, 0.5f, -0.5f),
+    //     new Triangle(-0.5f, -0.5f, -0.5f, /**/ 0.5f, 0.5f, -0.5f, /**/ 0.5f, -0.5f, -0.5f),
 
-        new Triangle(0.5f, -0.5f, -0.5f, /**/ 0.5f, 0.5f, -0.5f, /**/ 0.5f, 0.5f, 0.5f),
-        new Triangle(0.5f, -0.5f, -0.5f, /**/ 0.5f, 0.5f, 0.5f, /**/ 0.5f, -0.5f, 0.5f),
+    //     new Triangle(0.5f, -0.5f, -0.5f, /**/ 0.5f, 0.5f, -0.5f, /**/ 0.5f, 0.5f, 0.5f),
+    //     new Triangle(0.5f, -0.5f, -0.5f, /**/ 0.5f, 0.5f, 0.5f, /**/ 0.5f, -0.5f, 0.5f),
 
-        new Triangle(0.5f, -0.5f, 0.5f, /**/ 0.5f, 0.5f, 0.5f, /**/ -0.5f, 0.5f, 0.5f),
-        new Triangle(0.5f, -0.5f, 0.5f, /**/ -0.5f, 0.5f, 0.5f, /**/ -0.5f, -0.5f, 0.5f),
+    //     new Triangle(0.5f, -0.5f, 0.5f, /**/ 0.5f, 0.5f, 0.5f, /**/ -0.5f, 0.5f, 0.5f),
+    //     new Triangle(0.5f, -0.5f, 0.5f, /**/ -0.5f, 0.5f, 0.5f, /**/ -0.5f, -0.5f, 0.5f),
 
-        new Triangle(-0.5f, -0.5f, 0.5f, /**/ -0.5f, 0.5f, 0.5f, /**/ -0.5f, 0.5f, -0.5f),
-        new Triangle(-0.5f, -0.5f, 0.5f, /**/ -0.5f, 0.5f, -0.5f, /**/ -0.5f, -0.5f, -0.5f),
+    //     new Triangle(-0.5f, -0.5f, 0.5f, /**/ -0.5f, 0.5f, 0.5f, /**/ -0.5f, 0.5f, -0.5f),
+    //     new Triangle(-0.5f, -0.5f, 0.5f, /**/ -0.5f, 0.5f, -0.5f, /**/ -0.5f, -0.5f, -0.5f),
     
-        new Triangle(-0.5f, 0.5f, -0.5f, /**/ -0.5f, 0.5f, 0.5f, /**/ 0.5f, 0.5f, 0.5f),
-        new Triangle(-0.5f, 0.5f, -0.5f, /**/ 0.5f, 0.5f, 0.5f, /**/ 0.5f, 0.5f, -0.5f),
+    //     new Triangle(-0.5f, 0.5f, -0.5f, /**/ -0.5f, 0.5f, 0.5f, /**/ 0.5f, 0.5f, 0.5f),
+    //     new Triangle(-0.5f, 0.5f, -0.5f, /**/ 0.5f, 0.5f, 0.5f, /**/ 0.5f, 0.5f, -0.5f),
 
-        new Triangle(0.5f, -0.5f, 0.5f, /**/ -0.5f, -0.5f, 0.5f, /**/ -0.5f, -0.5f, -0.5f),
-        new Triangle(0.5f, -0.5f, 0.5f, /**/ -0.5f, -0.5f, -0.5f, /**/ 0.5f, -0.5f, -0.5f)
-    };
+    //     new Triangle(0.5f, -0.5f, 0.5f, /**/ -0.5f, -0.5f, 0.5f, /**/ -0.5f, -0.5f, -0.5f),
+    //     new Triangle(0.5f, -0.5f, 0.5f, /**/ -0.5f, -0.5f, -0.5f, /**/ 0.5f, -0.5f, -0.5f)
+    // };
 
     public static void main(String... args) throws InterruptedException {
         Window.initialize();
@@ -61,6 +63,8 @@ public class Main {
         Mesh CUBE_MESH = new Mesh(CUBE_TRIANGLES);
 
         Transform cube = new Transform();
+
+        // Texture texture = new Texture("./app/src/ma")
 
         Shader shader = Shader.fromFiles(
             "./app/src/main/resources/basic"
@@ -79,7 +83,10 @@ public class Main {
             // DRAWING LOOP
             window.clear();
 
-            window.draw(CUBE_MESH, cube);
+            // window.draw(
+            //     CUBE_MESH, 
+            //     cube
+            // );
 
             window.swapBuffers();
             window.pollEvents();

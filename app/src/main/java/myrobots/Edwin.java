@@ -30,7 +30,8 @@ public class Edwin extends Robot<TankDrive> {
         Vector2D position = getPosition();
         Angle angle = getAngle();
 
-        getDrivetrain().arcadeDrive(1, 1);
+        // getDrivetrain().arcadeDrive(1, 0.1);
+    
     }
 
     public Color getColor() {

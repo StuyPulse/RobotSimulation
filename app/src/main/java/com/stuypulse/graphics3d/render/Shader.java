@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 
 import com.stuypulse.graphics3d.Window;
+import com.stuypulse.stuylib.math.SLMath;
 
 import org.joml.Matrix4f;
 
@@ -95,6 +96,7 @@ public final class Shader implements GlObject {
     private final int vertexShader, fragmentShader, program;
 
     private final int uProject, uTransform, uCamera;
+    private final int uColor;
 
     private Shader(String vertexText, String fragText) {
         Window.addObject(this);
@@ -115,6 +117,8 @@ public final class Shader implements GlObject {
         uProject = setupUniform(program, "projection");
         uTransform = setupUniform(program, "transform");
         uCamera = setupUniform(program, "view");
+
+        uColor = setupUniform(program, "surfaceColor");
     }
 
     public void destroy() {
@@ -128,8 +132,22 @@ public final class Shader implements GlObject {
     // Setup Shader
 
 
-    // made for testing
     private final static boolean TRANSPOSE = false;
+
+    protected void setColor(float r, float g, float b, float a) {
+        glUniform4fv(uColor, new float[] { r, g, b, a });
+    }
+
+    protected void setColor(int r, int g, int b, int a) {
+        glUniform4fv(
+            uColor,
+            new float[] {
+                (float) SLMath.limit(r/255.0, 0, 1),
+                (float) SLMath.limit(r/255.0, 0, 1),
+                (float) SLMath.limit(r/255.0, 0, 1)
+            }
+        );
+    }
 
     protected void useCamera(Camera camera) {
         glUniformMatrix4fv(
@@ -145,7 +163,6 @@ public final class Shader implements GlObject {
         );
     }
     
-    // add transform class later
     protected void useTransform(Transform transform) {
         glUniformMatrix4fv(
             uTransform,

@@ -15,6 +15,7 @@ import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.util.StopWatch;
 
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -40,6 +41,8 @@ public final class Graphics {
     private Window window;
     private StopWatch timer;
 
+    private Mesh mesh;
+
     public Graphics() {
         this.robots = new LinkedList<>();
 
@@ -52,8 +55,10 @@ public final class Graphics {
             HEIGHT
         );
 
+        this.mesh = MeshLoader.getMeshFromObj(MESH);
+
         this.window.setShader(Shader.fromFiles(SHADER));
-        this.window.getMouse().setVisible(false);
+        this.window.getMouse().setVisible(!HIDE_MOUSE);
 
         setupCamera(this.window.getCamera());
     }
@@ -70,13 +75,17 @@ public final class Graphics {
         final Angle angle = r.getAngle();
 
         window.draw(
-            r.getDrivetrain().getMesh(), 
+            this.mesh,
+            // r.getDrivetrain().getMesh(), 
             // do this to avoid creating a joml.Vector3f
             new Transform()
                 .setCentered(r.getDrivetrain().isCentered())
                 .setPitch(angle)
                 .setX((float) pos.x)
-                .setZ((float) pos.y)
+                .setZ((float) pos.y),
+                
+            r.getDrivetrain().getColor()
+
         );
 
     }
@@ -87,6 +96,7 @@ public final class Graphics {
 
     public void periodic() {
         // PERIODIC LOOP
+        window.pollErrors();
         window.clear();
 
         for(Robot<?> r : robots) {

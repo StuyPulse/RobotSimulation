@@ -16,11 +16,14 @@ public interface Constants {
      **********************/
 
     interface WindowSettings {
-        int WIDTH = 960 * 2;
-        int HEIGHT = 540 * 2;
+        int WIDTH = 960;
+        int HEIGHT = 540;
         String TITLE = "Robot Simulation";
+
+        boolean HIDE_MOUSE = true;
     
-        String SHADER = "./app/src/main/resources/basic";
+        String SHADER = "./app/src/main/resources/shaders/basic";
+        String MESH = "./app/src/main/resources/obj/Drivetrain_Assembly.obj";
     }
 
     interface CameraSettings {
