@@ -1,10 +1,12 @@
 package com.stuypulse.robot.subsystems;
 
 import com.stuypulse.graphics.MeshLoader;
+import com.stuypulse.graphics.RenderObject;
 import com.stuypulse.graphics3d.render.Mesh;
+import com.stuypulse.graphics3d.render.Transform;
 import com.stuypulse.physics.Force;
 
-import org.joml.Vector4f;
+import java.util.List;
 
 /**
  * The basic outline for a drivetrain is something that results in a netforce
@@ -15,20 +17,33 @@ import org.joml.Vector4f;
  */
 public interface Drivetrain {
 
+    /***********
+     * PHYSICS *
+     ***********/
+
     Force getNetForce();
 
     /*************
      * RENDERING *
      *************/
 
-    default Mesh getMesh() {
-        return MeshLoader.getDefaultMesh();
-    }
+    /**
+     * Returns a list describing how to render a drivetrain. Having
+     * a list allows for creating multipart drivetrains
+     * 
+     * @return list of meshes and transforms.
+     */
+    List<RenderObject> getRenderable();
 
-    default Vector4f getColor() {
-        return new Vector4f(0, 0.23f, 0, 1);
-    }
-
+    /**
+     * Describes how the drivetrain should be rotated
+     * 
+     * if true, the robot mesh is rotated around itself
+     * if false, the robot mesh is rotated around the origin 
+     * 
+     * 
+     * @return true or false value
+     */
     default boolean isCentered() {
         return true;
     }

@@ -24,15 +24,15 @@ public final class Renderer {
         return this;
     }
 
-    public Renderer setColor(float r, float g, float b, float a) {
+    public Renderer setColor(float r, float g, float b) {
         if (shader != null)
-            shader.setColor(r,g,b,a);
+            shader.setColor(r,g,b);
         return this;
     }
 
-    public Renderer setColor(int r, int g, int b, int a) {
+    public Renderer setColor(int r, int g, int b) {
         if (shader != null)
-            shader.setColor(r,g,b,a);
+            shader.setColor(r,g,b);
         return this;
     }
 

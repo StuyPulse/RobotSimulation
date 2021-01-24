@@ -12,6 +12,8 @@ import com.stuypulse.physics.State;
 import com.stuypulse.physics.Position;
 import com.stuypulse.stuylib.util.StopWatch;
 
+import org.joml.Vector3f;
+
 /**
  * This is the robot class that you will be extending when making your
  * own robot. It is relatively simple, and supports different types of drivetrain.
@@ -41,8 +43,8 @@ public abstract class Robot<DT extends Drivetrain> {
      * 
      * @return the color you want the robot to be
      */
-    public Color getColor() {
-        return Color.BLACK;
+    public Vector3f getColor() {
+        return new Vector3f(1,1,1);
     }
 
     /**********************************/

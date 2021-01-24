@@ -3,6 +3,7 @@ package com.stuypulse;
 import com.stuypulse.stuylib.math.Angle;
 
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -22,8 +23,7 @@ public interface Constants {
 
         boolean HIDE_MOUSE = true;
     
-        String SHADER = "./app/src/main/resources/shaders/basic";
-        String MESH = "./app/src/main/resources/obj/Drivetrain_Assembly.obj";
+        String SHADER = "./app/src/main/resources/shaders/uni_lighting";
     }
 
     interface CameraSettings {
@@ -32,8 +32,8 @@ public interface Constants {
         float NEAR_PLANE = 0.01f;
         float FAR_PLANE = 1_000f;
         
-        Vector3f POSITION = new Vector3f(0,5,0);
-        Angle YAW = Angle.kZero;
+        Vector3f POSITION = new Vector3f(2.5f, 0.5f, 0);
+        Angle YAW = Angle.fromDegrees(-45.0);
         Angle PITCH = Angle.k90deg;
         Angle ROLL = Angle.kZero;
 
@@ -49,8 +49,18 @@ public interface Constants {
 
         float SENSITIVITY_X = 30f;
         float SENSITIVITY_Y = 30f;
-        float SLOW_SPEED = 10f;
-        float FAST_SPEED = 30f;
+        float SLOW_SPEED = 0.5f;
+        float FAST_SPEED = 5f;
+
+        int TOGGLE_SIMULATION = GLFW_KEY_P;
+    }
+
+    interface SwerveDriveSettings {
+        String SWERVE_PATH = "./app/src/main/resources/meshes/Drivetrain_Assembly.obj";
+    }
+
+    interface TankDriveSettings {
+        String TANK_PATH = "./app/src/main/resources/meshes/Drivetrain_Assembly.obj";
     }
 
     /************************

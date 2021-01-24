@@ -1,6 +1,7 @@
 package com.stuypulse.graphics3d;
 
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.joml.Vector4f;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
@@ -167,11 +168,11 @@ public class Window implements GlObject{
         this.clear(r, g, b, 1);
     }
 
-    public Window draw(Mesh mesh, Transform transform, Vector4f color) {
+    public Window draw(Mesh mesh, Transform transform, Vector3f color) {
         // I dont like the fact that it's necessary 
         // to update a camera uniform on every draw
 
-        this.renderer.setColor(color.x, color.y, color.z, color.w);
+        this.renderer.setColor(color.x, color.y, color.z);
         this.renderer.updateCamera();
         this.renderer.setTransform(transform);
         this.renderer.draw(mesh);

@@ -1,8 +1,17 @@
 package com.stuypulse.robot.subsystems;
 
-import com.stuypulse.stuylib.math.*;
+import com.stuypulse.graphics.MeshLoader;
+import com.stuypulse.graphics.RenderObject;
+import com.stuypulse.graphics3d.render.Mesh;
 import com.stuypulse.physics.Force;
 import com.stuypulse.robot.subsystems.components.Wheel;
+import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.math.Vector2D;
+
+import static com.stuypulse.Constants.TankDriveSettings.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is an implementation of TankDrive or DifferentialDrive for this simulation.
@@ -49,12 +58,28 @@ public class TankDrive implements Drivetrain {
         );
     }
 
-    /**
-     * Relates to how the mesh should rotate around the origin or
-     * itself
-     */
+    // Describes how the tank drive model should be rotated
     public boolean isCentered() {
-        return false;
+        return true;
+    }
+
+    private static Mesh TANK_MESH = null;
+
+    public List<RenderObject> getRenderable() {
+        
+        List<RenderObject> out = new ArrayList<>();
+
+        if (TANK_MESH == null) {
+            TANK_MESH = MeshLoader.getMeshFromObj(
+                TANK_PATH, 
+                Angle.fromDegrees(270), 
+                Angle.kZero, 
+                Angle.kZero
+            );
+        }
+
+        return out;
+
     }
 
 }

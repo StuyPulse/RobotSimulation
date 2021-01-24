@@ -3,8 +3,6 @@ package com.stuypulse.graphics;
 import static com.stuypulse.Constants.WindowSettings.*;
 import static com.stuypulse.Constants.CameraSettings.*;
 
-import com.stuypulse.graphics3d.Main;
-import com.stuypulse.graphics3d.math3d.Triangle;
 import com.stuypulse.graphics3d.*;
 import com.stuypulse.graphics3d.render.*;
 
@@ -15,15 +13,11 @@ import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.util.StopWatch;
 
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 import java.util.List;
 import java.util.LinkedList;
 
 public final class Graphics {
-
-    public final static Triangle[] CUBE_TRIANGLES =
-        Main.CUBE_TRIANGLES; // eventually move the cube triangles into here
 
     private final static void setupCamera(Camera camera) {
         camera.setFov(FOV);
@@ -41,8 +35,10 @@ public final class Graphics {
     private Window window;
     private StopWatch timer;
 
-    private Mesh mesh;
-
+    private void centerMouse() {
+        this.window.getMouse().setPosition(WIDTH / 2, HEIGHT / 2);
+    }
+    
     public Graphics() {
         this.robots = new LinkedList<>();
 
@@ -55,10 +51,10 @@ public final class Graphics {
             HEIGHT
         );
 
-        this.mesh = MeshLoader.getMeshFromObj(MESH);
-
         this.window.setShader(Shader.fromFiles(SHADER));
         this.window.getMouse().setVisible(!HIDE_MOUSE);
+
+        centerMouse();
 
         setupCamera(this.window.getCamera());
     }
@@ -71,27 +67,41 @@ public final class Graphics {
     }
 
     public void drawRobot(Robot<?> r) {
-        final Vector2D pos = r.getPosition();
-        final Angle angle = r.getAngle();
+        Vector2D pos = r.getPosition();
+        Angle angle = r.getAngle();
 
-        window.draw(
-            this.mesh,
-            // r.getDrivetrain().getMesh(), 
-            // do this to avoid creating a joml.Vector3f
-            new Transform()
-                .setCentered(r.getDrivetrain().isCentered())
-                .setPitch(angle)
-                .setX((float) pos.x)
-                .setZ((float) pos.y),
+        List<RenderObject> renderables = r.getDrivetrain().getRenderable();
+        
+
+        Transform transform = new Transform()
+            .setPitch(angle)
+            .setX((float) pos.x)
+            .setZ((float) pos.y);
+
+        for (RenderObject obj : renderables) {
+            window.draw(
+                obj.getMesh(),
+
+                new Transform(obj.getTransform())
+                    .transform(transform)
+                    .setCentered(r.getDrivetrain().isCentered()),
                 
-            r.getDrivetrain().getColor()
-
-        );
+                r.getColor()
+            );
+        }
 
     }
 
     public boolean isOpen() {
         return window.isOpen();
+    }
+
+    private boolean simulating = false;
+
+    private boolean lastToggle = false;
+
+    public boolean isSimulating() {
+        return simulating;
     }
 
     public void periodic() {
@@ -116,6 +126,9 @@ public final class Graphics {
         if (keys.hasKey(EXIT)) {
             window.close();
         }
+
+        final boolean toggle = keys.hasKey(TOGGLE_SIMULATION);
+        simulating ^= (toggle && !lastToggle);
 
         // CAMERA MOVEMENT
         final float speed = keys.hasKey(SPEED_UP) ? FAST_SPEED : SLOW_SPEED;
@@ -150,7 +163,8 @@ public final class Graphics {
             MAX_ANGLE
         )));
 
-        mouse.setPosition(WIDTH / 2, HEIGHT / 2);
+        centerMouse();
+        lastToggle = toggle;
     }
 
 }

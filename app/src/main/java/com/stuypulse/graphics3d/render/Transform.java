@@ -15,7 +15,6 @@ public final class Transform {
     private Vector3f scale; 
 
     private Matrix4f transform;
-
     private boolean centered;
 
     public Transform(
@@ -32,6 +31,20 @@ public final class Transform {
         this.transform = null;
         
         this.centered = false;
+    }
+
+    public Transform(
+        Transform other
+    ) {
+        this.translation = other.translation;
+        this.pitch = other.pitch;
+        this.yaw = other.yaw;
+        this.roll = other.roll;
+
+        this.scale = other.scale;
+
+        this.transform = other.transform;
+        this.centered = other.centered;
     }
 
     public Transform(
@@ -124,6 +137,16 @@ public final class Transform {
 
     public Transform setCentered(boolean isCentered) {
         this.centered = isCentered;
+        this.transform = null;
+        return this;
+    }
+
+    public Transform transform(Transform other) {
+        translation = translation.add(other.translation);
+        yaw = Angle.fromDegrees(yaw.toDegrees() + other.yaw.toDegrees());
+        pitch = Angle.fromDegrees(pitch.toDegrees() + other.pitch.toDegrees());
+        roll = Angle.fromDegrees(roll.toDegrees() + other.roll.toDegrees());
+
         this.transform = null;
         return this;
     }

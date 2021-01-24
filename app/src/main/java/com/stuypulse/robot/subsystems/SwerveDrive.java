@@ -2,11 +2,19 @@ package com.stuypulse.robot.subsystems;
 
 import com.stuypulse.stuylib.math.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import com.stuypulse.graphics.MeshLoader;
+import com.stuypulse.graphics.RenderObject;
+import com.stuypulse.graphics3d.render.Mesh;
+import com.stuypulse.graphics3d.render.Transform;
 import com.stuypulse.physics.Force;
 import com.stuypulse.robot.subsystems.components.SwerveModule;
+
+import static com.stuypulse.Constants.SwerveDriveSettings.*;
 
 /**
  * This is an implementation of SwerveDrive for this simulation.
@@ -83,6 +91,33 @@ public class SwerveDrive implements Drivetrain {
                 .collect(Collectors.toList())
                 .toArray(new Force[0])
         );
+    }
+
+    /******************
+     * RENDER DETAILS *
+     ******************/
+
+    private static Mesh SWERVE_MESH = null;
+
+    public List<RenderObject> getRenderable() {
+
+        List<RenderObject> out = new ArrayList<>();
+
+        if (SWERVE_MESH == null) {
+            SWERVE_MESH = MeshLoader.getMeshFromObj(
+                SWERVE_PATH, 
+                Angle.fromDegrees(270.0), 
+                Angle.kZero, 
+                Angle.kZero
+            );
+        }
+
+        out.add(new RenderObject(
+            SWERVE_MESH
+        ));
+
+        return out;
+        
     }
 
 }

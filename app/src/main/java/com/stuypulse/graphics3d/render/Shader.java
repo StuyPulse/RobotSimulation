@@ -134,12 +134,12 @@ public final class Shader implements GlObject {
 
     private final static boolean TRANSPOSE = false;
 
-    protected void setColor(float r, float g, float b, float a) {
-        glUniform4fv(uColor, new float[] { r, g, b, a });
+    protected void setColor(float r, float g, float b) {
+        glUniform3fv(uColor, new float[] { r, g, b });
     }
 
-    protected void setColor(int r, int g, int b, int a) {
-        glUniform4fv(
+    protected void setColor(int r, int g, int b) {
+        glUniform3fv(
             uColor,
             new float[] {
                 (float) SLMath.limit(r/255.0, 0, 1),

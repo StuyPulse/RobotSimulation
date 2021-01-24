@@ -5,6 +5,9 @@ import java.awt.Color;
 import com.stuypulse.stuylib.math.*;
 import com.stuypulse.stuylib.streams.filters.IFilter;
 import com.stuypulse.stuylib.streams.filters.LowPassFilter;
+
+import org.joml.Vector3f;
+
 import com.stuypulse.stuylib.control.*;
 import com.stuypulse.robot.subsystems.*;
 import com.stuypulse.robot.subsystems.components.Wheel;
@@ -43,9 +46,9 @@ public class JeremyBot extends Robot<SwerveDrive> {
         Vector2D direction = new Vector2D(0.0, 0.0);
         double turn = 0;
 
-        // SWERVE MOVEMEMNT HERE
-        direction = direction.add(new Vector2D(1,0));
-        turn = 0.25;
+        // SWERVE MOVEMENT HERE
+        direction = direction.add(new Vector2D(0.01,0));
+        turn = 0.01;
 
         // Makes the control field centric
         direction = direction.rotate(Angle.kZero.sub(angle));
@@ -54,8 +57,8 @@ public class JeremyBot extends Robot<SwerveDrive> {
         getDrivetrain().swerveDrive(direction, turnFilter.get(turn));
     }
 
-    public Color getColor() {
-        return Color.RED;
+    public Vector3f getColor() {
+        return new Vector3f(1f, 0, 0);
     }
 
 }

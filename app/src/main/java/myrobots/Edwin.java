@@ -2,11 +2,14 @@ package myrobots;
 
 /*** VERY VERY IMPORTANT THAT YOU IMPORT THESE ***/
 import java.awt.Color;
-import com.stuypulse.stuylib.math.*;
-import com.stuypulse.stuylib.control.*;
-import com.stuypulse.robot.subsystems.*;
-import com.stuypulse.robot.*;
+
 /*************************************************/
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.subsystems.TankDrive;
+import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.math.Vector2D;
+
+import org.joml.Vector4f;
 
 /**
  * This robot is here to show you what an example implementation
@@ -28,14 +31,10 @@ public class Edwin extends Robot<TankDrive> {
     public void execute() {
         // Get information about the drivetrain;
         Vector2D position = getPosition();
-        Angle angle = getAngle();
+        Angle angle = getAngle(); // TODO: angle is around the origin not around the robot itself
 
-        // getDrivetrain().arcadeDrive(1, 0.1);
+        getDrivetrain().arcadeDrive(0.1, 0.1);
     
-    }
-
-    public Color getColor() {
-        return Color.RED;
     }
 
 }

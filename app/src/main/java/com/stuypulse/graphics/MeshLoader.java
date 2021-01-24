@@ -6,27 +6,54 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.stuypulse.Constants.WindowSettings.*;
+
 import com.stuypulse.graphics3d.math3d.Triangle;
 import com.stuypulse.graphics3d.math3d.Vertex;
 import com.stuypulse.graphics3d.render.Mesh;
+import com.stuypulse.stuylib.math.Angle;
 
 import org.joml.Vector3f;
 
 public final class MeshLoader {
     
 
-    private static Mesh DEFAULT_MESH = null;
-    
-    public static final Mesh getDefaultMesh() {
-        if (DEFAULT_MESH == null) {
-            DEFAULT_MESH = new Mesh(Graphics.CUBE_TRIANGLES);
-        }
-        return DEFAULT_MESH;
+    /**
+     * May be easiest to load meshes during runtime
+     */
+
+    /**
+     * Creates a mesh from an obj file
+     * 
+     * @param path
+     * @return
+     */
+    public static final Mesh getMeshFromObj(String path) {
+        return getMeshFromObj(path, Angle.kZero, Angle.kZero, Angle.kZero);
     }
 
-    public static final Mesh getMeshFromObj(String path) {
+    /**
+     * Creates a mesh from an obj file
+     * 
+     * Requires:
+     *  * f v/t/n v/t/n v/t/n
+     *  * f v//n v//n v//n
+     * 
+     * Other formats are not supported
+     * 
+     * @param path path to the obj file
+     * @param yaw rotate mesh on load
+     * @param pitch rotate mesh on load
+     * @param roll rotate mesh on load
+     * @return the mesh
+     */
+    public static final Mesh getMeshFromObj(String path, Angle yaw, Angle pitch, Angle roll) {
 
         try {
+            final float y = (float) yaw.toRadians();
+            final float p = (float) pitch.toRadians();
+            final float r = (float) roll.toRadians();
+
             BufferedReader input = new BufferedReader(new FileReader(new File(path)));
 
             List<Vector3f> points = new ArrayList<>();
@@ -45,21 +72,36 @@ public final class MeshLoader {
                 if (line.startsWith("v ")) {
                     final String[] parts = line.split(" ");
                     
-                    points.add(new Vector3f(
+
+                    Vector3f pt = new Vector3f(
                         (float) Double.parseDouble(parts[1]),
                         (float) Double.parseDouble(parts[2]),
                         (float) Double.parseDouble(parts[3])
-                    ));
+                    );
+
+                    pt = pt
+                        .rotateAxis(y, 1, 0, 0)
+                        .rotateAxis(p, 0, 1, 0)
+                        .rotateAxis(r, 0, 0, 1);
+
+                    points.add(pt);
                 } 
                 
                 else if (line.startsWith("vn ")) {
                     final String[] parts = line.split(" ");
 
-                    normals.add(new Vector3f(
+                    Vector3f nm = new Vector3f(
                         (float) Double.parseDouble(parts[1]),
                         (float) Double.parseDouble(parts[2]),
                         (float) Double.parseDouble(parts[3])
-                    ));
+                    );
+                    
+                    nm = nm
+                        .rotateAxis(y, 1, 0, 0)
+                        .rotateAxis(p, 0, 1, 0)
+                        .rotateAxis(r, 0, 0, 1);
+
+                    normals.add(nm);
                 }
 
                 else if (line.startsWith("f ")) {
