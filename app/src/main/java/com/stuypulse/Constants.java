@@ -24,6 +24,9 @@ public interface Constants {
         boolean HIDE_MOUSE = true;
     
         String SHADER = "./app/src/main/resources/shaders/uni_lighting";
+    
+        String GRID_PATH = "./app/src/main/resources/meshes/Grid.obj";
+        String GRID_SHADER = "./app/src/main/resources/shaders/grid";
     }
 
     interface CameraSettings {

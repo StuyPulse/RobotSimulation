@@ -60,15 +60,15 @@ public final class Shader implements GlObject {
         }
     } 
 
-    private static final int setupUniform(int program, String name) {
-        int uniformPtr = glGetUniformLocation(program, name); 
+    // private static final int setupUniform(int program, String name) {
+    //     int uniformPtr = glGetUniformLocation(program, name); 
         
-        if (uniformPtr == -1) {
-            throw new IllegalStateException("Unable to get uniform location (-1) for " + name + " in program (" + program + ")");
-        }
+    //     if (uniformPtr == -1) {
+    //         throw new IllegalStateException("Unable to get uniform location (-1) for " + name + " in program (" + program + ")");
+    //     }
 
-        return uniformPtr;
-    }
+    //     return uniformPtr;
+    // }
 
     private static final float[] getFloatsFromMat(Matrix4f in) {
         float[] out = new float[16];
@@ -114,11 +114,11 @@ public final class Shader implements GlObject {
         glValidateProgram(program);
         handleProgramError(program, GL_VALIDATE_STATUS);
 
-        uProject = setupUniform(program, "projection");
-        uTransform = setupUniform(program, "transform");
-        uCamera = setupUniform(program, "view");
+        uProject = glGetUniformLocation(program, "projection");
+        uTransform = glGetUniformLocation(program, "transform");
+        uCamera = glGetUniformLocation(program, "view");
 
-        uColor = setupUniform(program, "surfaceColor");
+        uColor = glGetUniformLocation(program, "surfaceColor");
     }
 
     public void destroy() {
@@ -135,32 +135,36 @@ public final class Shader implements GlObject {
     private final static boolean TRANSPOSE = false;
 
     protected void setColor(float r, float g, float b) {
-        glUniform3fv(uColor, new float[] { r, g, b });
+        if (uColor != -1)
+            glUniform3fv(uColor, new float[] { r, g, b });
     }
 
     protected void setColor(int r, int g, int b) {
-        glUniform3fv(
-            uColor,
-            new float[] {
-                (float) SLMath.limit(r/255.0, 0, 1),
-                (float) SLMath.limit(r/255.0, 0, 1),
-                (float) SLMath.limit(r/255.0, 0, 1)
-            }
-        );
+        if (uColor != -1)
+            glUniform3fv(
+                uColor,
+                new float[] {
+                    (float) SLMath.limit(r/255.0, 0, 1),
+                    (float) SLMath.limit(r/255.0, 0, 1),
+                    (float) SLMath.limit(r/255.0, 0, 1)
+                }
+            );
     }
 
     protected void useCamera(Camera camera) {
-        glUniformMatrix4fv(
-            uProject, 
-            TRANSPOSE, 
-            getFloatsFromMat(camera.getProjection())
-        );
+        if (uProject != -1)
+            glUniformMatrix4fv(
+                uProject, 
+                TRANSPOSE, 
+                getFloatsFromMat(camera.getProjection())
+            );
 
-        glUniformMatrix4fv(
-            uCamera, 
-            TRANSPOSE, 
-            getFloatsFromMat(camera.getView())
-        );
+        if (uCamera != -1)
+            glUniformMatrix4fv(
+                uCamera, 
+                TRANSPOSE, 
+                getFloatsFromMat(camera.getView())
+            );
     }
     
     protected void useTransform(Transform transform) {

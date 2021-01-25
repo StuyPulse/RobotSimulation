@@ -1,9 +1,6 @@
 package com.stuypulse.robot.subsystems;
 
-import com.stuypulse.graphics.MeshLoader;
 import com.stuypulse.graphics.RenderObject;
-import com.stuypulse.graphics3d.render.Mesh;
-import com.stuypulse.graphics3d.render.Transform;
 import com.stuypulse.physics.Force;
 
 import java.util.List;

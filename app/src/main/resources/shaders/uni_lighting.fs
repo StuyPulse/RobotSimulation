@@ -19,7 +19,7 @@ void main() {
         normalize(lightSource),
         normalize(surfaceNormal)
     );
-    brightness = clamp(brightness, 0.1, 1.0);
+    brightness = clamp(brightness, 0.0, 1.0);
 
     fragColor = brightness * surfaceColor;
 

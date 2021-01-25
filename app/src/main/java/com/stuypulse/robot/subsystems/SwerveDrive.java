@@ -7,10 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.stuypulse.graphics.MeshLoader;
+import com.stuypulse.graphics.MeshInstance;
 import com.stuypulse.graphics.RenderObject;
-import com.stuypulse.graphics3d.render.Mesh;
-import com.stuypulse.graphics3d.render.Transform;
 import com.stuypulse.physics.Force;
 import com.stuypulse.robot.subsystems.components.SwerveModule;
 
@@ -97,23 +95,19 @@ public class SwerveDrive implements Drivetrain {
      * RENDER DETAILS *
      ******************/
 
-    private static Mesh SWERVE_MESH = null;
+    protected static MeshInstance SWERVE_MESH = new MeshInstance(
+        SWERVE_PATH, 
+        Angle.fromDegrees(270.0),
+        Angle.fromDegrees(90.0),
+        Angle.kZero
+    );
 
     public List<RenderObject> getRenderable() {
 
         List<RenderObject> out = new ArrayList<>();
 
-        if (SWERVE_MESH == null) {
-            SWERVE_MESH = MeshLoader.getMeshFromObj(
-                SWERVE_PATH, 
-                Angle.fromDegrees(270.0), 
-                Angle.kZero, 
-                Angle.kZero
-            );
-        }
-
         out.add(new RenderObject(
-            SWERVE_MESH
+            SWERVE_MESH.get()
         ));
 
         return out;

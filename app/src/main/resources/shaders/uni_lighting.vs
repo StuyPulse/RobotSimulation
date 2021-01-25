@@ -26,7 +26,7 @@ void main() {
     gl_Position = projection * view * worldPosition;
 
     // light direction    
-    lightSource = vec3(0, 1, 0);
+    lightSource = vec3(1, 1, 0);
 
 
 }

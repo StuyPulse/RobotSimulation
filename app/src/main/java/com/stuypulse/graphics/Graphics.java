@@ -29,6 +29,8 @@ public final class Graphics {
         camera.setRoll(ROLL);
     }
 
+    private static final MeshInstance GRID_MESH = new MeshInstance(GRID_PATH);
+
     private final List<Robot<?>> robots;
     
     // Graphics Library
@@ -108,6 +110,15 @@ public final class Graphics {
         // PERIODIC LOOP
         window.pollErrors();
         window.clear();
+
+        // draw grid / floor
+        window.draw(
+            GRID_MESH.get(), 
+            new Transform()
+                .setScale(new Vector3f(100, 1, 100))
+                .setY(-0.075f), 
+            new Vector3f(0, 0.1f, 0)
+        );
 
         for(Robot<?> r : robots) {
             drawRobot(r);

@@ -1,15 +1,11 @@
 package myrobots;
 
 /*** VERY VERY IMPORTANT THAT YOU IMPORT THESE ***/
-import java.awt.Color;
-
-/*************************************************/
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.TankDrive;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
-
-import org.joml.Vector4f;
+/*************************************************/
 
 /**
  * This robot is here to show you what an example implementation

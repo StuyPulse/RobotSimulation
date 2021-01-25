@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.stuypulse.Constants.WindowSettings.*;
-
 import com.stuypulse.graphics3d.math3d.Triangle;
 import com.stuypulse.graphics3d.math3d.Vertex;
 import com.stuypulse.graphics3d.render.Mesh;

@@ -1,8 +1,6 @@
 package com.stuypulse.graphics3d;
 
 import org.joml.Vector3f;
-import org.joml.Vector3i;
-import org.joml.Vector4f;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -101,6 +99,7 @@ public class Window implements GlObject{
 
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
+        // glEnable(GL_BLEND);
         
         // glDepthFunc(GL_LESS); // <-- default
 

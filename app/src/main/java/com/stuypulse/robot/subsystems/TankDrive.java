@@ -1,8 +1,7 @@
 package com.stuypulse.robot.subsystems;
 
-import com.stuypulse.graphics.MeshLoader;
+import com.stuypulse.graphics.MeshInstance;
 import com.stuypulse.graphics.RenderObject;
-import com.stuypulse.graphics3d.render.Mesh;
 import com.stuypulse.physics.Force;
 import com.stuypulse.robot.subsystems.components.Wheel;
 import com.stuypulse.stuylib.math.Angle;
@@ -60,23 +59,25 @@ public class TankDrive implements Drivetrain {
 
     // Describes how the tank drive model should be rotated
     public boolean isCentered() {
-        return true;
+        return false;
     }
 
-    private static Mesh TANK_MESH = null;
+    // protected static MeshInstance TANK_MESH = new MeshInstance(
+    //     TANK_PATH, 
+    //     Angle.fromDegrees(270), 
+    //     Angle.fromDegrees(90), 
+    //     Angle.kZero
+    // );
+
+    protected static MeshInstance TANK_MESH = SwerveDrive.SWERVE_MESH;
 
     public List<RenderObject> getRenderable() {
         
         List<RenderObject> out = new ArrayList<>();
-
-        if (TANK_MESH == null) {
-            TANK_MESH = MeshLoader.getMeshFromObj(
-                TANK_PATH, 
-                Angle.fromDegrees(270), 
-                Angle.kZero, 
-                Angle.kZero
-            );
-        }
+        
+        out.add(new RenderObject(
+            TANK_MESH.get()
+        ));
 
         return out;
 

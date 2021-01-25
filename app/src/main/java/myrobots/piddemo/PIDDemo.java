@@ -2,11 +2,8 @@ package myrobots.piddemo;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.TankDrive;
-import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.math.Vector2D;
 
-import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.subsystems.TankDrive;
+import org.joml.Vector3f;
 
 public class PIDDemo extends Robot<TankDrive> {
 
@@ -32,7 +29,7 @@ public class PIDDemo extends Robot<TankDrive> {
         double kP = 0.5;//0.1;
 
         double dError = (error - previousError) / dt;
-        double kD = 0.2; 
+        double kD = 0.2;
         
         // if (error > 0)
         // // NOTE: driving like this increases the x-position positively
@@ -60,6 +57,10 @@ public class PIDDemo extends Robot<TankDrive> {
     @Override
     public String getAuthor() {
         return "Tahsin & Myles";
+    }
+
+    public Vector3f getColor() {
+        return new Vector3f(252f / 255.0f, 183f / 255.0f, 3f / 255.0f);
     }
 
 }
