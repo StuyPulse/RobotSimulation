@@ -5,19 +5,22 @@ import com.stuypulse.robot.subsystems.TankDrive;
 
 import org.joml.Vector3f;
 
+import com.stuypulse.stuylib.control.*;
+
 public class PIDDemo extends Robot<TankDrive> {
+
+    private PIDController controller;
 
     public PIDDemo() {
         super(new TankDrive());
+
+        controller = new PIDController(0.5, 0, 0.2);
     }
     
     /**
      * This code is run repeatedly
      */
     
-    private double previousError = 0;
-    private double dt = 0.02;
-
     @Override
     protected void execute() {
         final double target = 5;
@@ -25,29 +28,11 @@ public class PIDDemo extends Robot<TankDrive> {
         
         final TankDrive drivetrain = getDrivetrain();
 
-        double error = target - x;
-        double kP = 0.5;//0.1;
-
-        double dError = (error - previousError) / dt;
-        double kD = 0.2;
-        
-        // if (error > 0)
-        // // NOTE: driving like this increases the x-position positively
-        //     drivetrain.arcadeDrive(0.5, 0);
-        // else if (error < 0)
-        //     drivetrain.arcadeDrive(-0.5, 0);
-        // else
-        //     drivetrain.arcadeDrive(0.0, 0);  
-        
-
         // pid algorithm implemented here
         drivetrain.arcadeDrive(
-            error * kP +
-            dError * kD,
+            controller.update(target, x),
             0
         );
-
-        previousError = error;
     }
     
     /**
@@ -64,26 +49,3 @@ public class PIDDemo extends Robot<TankDrive> {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
