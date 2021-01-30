@@ -24,7 +24,7 @@ public final class MeshInstance {
     }
 
     public MeshInstance(String path, Angle yaw, Angle pitch, Angle roll) {
-        this(() -> MeshLoader.getMeshFromObj(path, yaw, pitch, roll));
+        this(() -> Mesh.getMeshFromObj(path, yaw, pitch, roll));
     }
 
     public MeshInstance(String path) {

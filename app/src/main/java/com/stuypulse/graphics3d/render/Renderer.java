@@ -52,4 +52,11 @@ public final class Renderer {
         mesh.draw();
     }
 
+    public void draw(Skybox skybox) {
+        if(shader != null)
+            shader.setSkybox(0);
+            
+        skybox.draw(); 
+    }
+
 }

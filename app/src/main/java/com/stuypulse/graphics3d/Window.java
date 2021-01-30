@@ -178,6 +178,12 @@ public class Window implements GlObject{
         return this;
     }
 
+    public Window draw(Skybox skybox) {
+        this.renderer.updateCamera();
+        this.renderer.draw(skybox);
+        return this;
+    }
+
     public void swapBuffers() {
         glfwSwapBuffers(this.window);
     }

@@ -37,10 +37,11 @@ public final class Graphics {
     private Window window;
     private StopWatch timer;
 
-    private void centerMouse() {
-        this.window.getMouse().setPosition(WIDTH / 2, HEIGHT / 2);
-    }
+    private Shader meshShader;
     
+    private Skybox skybox;
+    private Shader skyboxShader;
+
     public Graphics() {
         this.robots = new LinkedList<>();
 
@@ -53,12 +54,20 @@ public final class Graphics {
             HEIGHT
         );
 
-        this.window.setShader(Shader.fromFiles(SHADER));
+        this.meshShader = Shader.fromFiles(SHADER);
+        this.window.setShader(meshShader);
         this.window.getMouse().setVisible(!HIDE_MOUSE);
+
+        this.skybox = new Skybox(CUBEMAP_PATH);
+        this.skyboxShader = Shader.fromFiles(SKYBOX_PATH);
 
         centerMouse();
 
         setupCamera(this.window.getCamera());
+    }
+
+    private void centerMouse() {
+        this.window.getMouse().setPosition(WIDTH / 2, HEIGHT / 2);
     }
 
     public Graphics addRobot(Robot<?>... rs) {
@@ -73,7 +82,6 @@ public final class Graphics {
         Angle angle = r.getAngle();
 
         List<RenderObject> renderables = r.getDrivetrain().getRenderable();
-        
 
         Transform transform = new Transform()
             .setPitch(angle)
@@ -99,49 +107,34 @@ public final class Graphics {
     }
 
     private boolean simulating = false;
-
     private boolean lastToggle = false;
 
     public boolean isSimulating() {
         return simulating;
     }
 
-    public void periodic() {
-        // PERIODIC LOOP
-        window.pollErrors();
-        window.clear();
+    private void drawSkybox() {
+        window.setShader(skyboxShader);
+        window.draw(skybox);
+    }
 
-        // draw grid / floor
+    private void drawFloor() {
+        window.setShader(meshShader);
         window.draw(
             GRID_MESH.get(), 
             new Transform()
                 .setScale(new Vector3f(100, 1, 100))
                 .setY(-0.075f), 
-            new Vector3f(0, 0.1f, 0)
+            new Vector3f(0, 0.8f, 0)
         );
+    }
 
-        for(Robot<?> r : robots) {
-            drawRobot(r);
-        }
-
-        window.swapBuffers();
-        window.pollEvents();
-
-        // KEY INPUT
-        final double dt = timer.reset();
-
+    private void updateCamera(double dt) {
         final var keys = window.getKeys();
         final var camera = window.getCamera();
         final var mouse = window.getMouse();
 
-        if (keys.hasKey(EXIT)) {
-            window.close();
-        }
-
-        final boolean toggle = keys.hasKey(TOGGLE_SIMULATION);
-        simulating ^= (toggle && !lastToggle);
-
-        // CAMERA MOVEMENT
+        // UPDATE POSITION
         final float speed = keys.hasKey(SPEED_UP) ? FAST_SPEED : SLOW_SPEED;
 
         float yDir = speed * (float)(dt) *
@@ -156,7 +149,7 @@ public final class Graphics {
 
         camera.setPosition(camera.getPosition().add(dir.rotateY(yAngle)));
 
-        // CAMERA ROTATION
+        // UPDATE ROTATION
         final var delta = mouse.getDelta();
     
         final double MAX_ANGLE = Math.PI / 2.0;
@@ -173,9 +166,45 @@ public final class Graphics {
             -MAX_ANGLE, 
             MAX_ANGLE
         )));
+    }
 
+    public void periodic() {
+
+        // PERIODIC LOOP
+        window.pollErrors();
+        window.clear();
+
+        // DRAWING
+        drawSkybox();
+        drawFloor();
+        for(Robot<?> r : robots)
+            drawRobot(r);
+
+        window.swapBuffers();
+        window.pollEvents();
+
+        // KEY INPUT
+        final double dt = timer.reset();
+
+        final var keys = window.getKeys();
+
+        if (keys.hasKey(EXIT)) {
+            window.close();
+        }
+
+        final boolean toggle = keys.hasKey(TOGGLE_SIMULATION);
+        simulating ^= (toggle && !lastToggle);
+
+        updateCamera(dt);
         centerMouse();
+
         lastToggle = toggle;
+
+        if (isSimulating()) {
+            for (Robot<?> r : robots) 
+                r.periodic(dt);
+        }
+
     }
 
 }

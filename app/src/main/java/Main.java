@@ -22,17 +22,11 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Window.initialize();
 
-        Graphics g = new Graphics().addRobot(robots);
+        Graphics g = new Graphics()
+            .addRobot(robots);
 
         while(g.isOpen()) {
-
-            if (g.isSimulating()) {
-                for(Robot<?> r : robots) {
-                    r.periodic();
-                }
-            }
             g.periodic();
-
             Thread.sleep(20);
         }
 

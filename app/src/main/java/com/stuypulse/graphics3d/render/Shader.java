@@ -60,16 +60,6 @@ public final class Shader implements GlObject {
         }
     } 
 
-    // private static final int setupUniform(int program, String name) {
-    //     int uniformPtr = glGetUniformLocation(program, name); 
-        
-    //     if (uniformPtr == -1) {
-    //         throw new IllegalStateException("Unable to get uniform location (-1) for " + name + " in program (" + program + ")");
-    //     }
-
-    //     return uniformPtr;
-    // }
-
     private static final float[] getFloatsFromMat(Matrix4f in) {
         float[] out = new float[16];
         in.get(out);
@@ -95,7 +85,11 @@ public final class Shader implements GlObject {
     // Shader class
     private final int vertexShader, fragmentShader, program;
 
+    // Vertex shaders
     private final int uProject, uTransform, uCamera;
+    
+    // fragment shaders
+    private final int uSkybox;
     private final int uColor;
 
     private Shader(String vertexText, String fragText) {
@@ -119,6 +113,7 @@ public final class Shader implements GlObject {
         uCamera = glGetUniformLocation(program, "view");
 
         uColor = glGetUniformLocation(program, "surfaceColor");
+        uSkybox = glGetUniformLocation(program, "skybox");
     }
 
     public void destroy() {
@@ -131,12 +126,16 @@ public final class Shader implements GlObject {
 
     // Setup Shader
 
-
     private final static boolean TRANSPOSE = false;
 
     protected void setColor(float r, float g, float b) {
         if (uColor != -1)
             glUniform3fv(uColor, new float[] { r, g, b });
+    }
+
+    protected void setSkybox(int i) {
+        if (uSkybox != -1)
+            glUniform1i(uSkybox, i);
     }
 
     protected void setColor(int r, int g, int b) {

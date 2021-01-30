@@ -17,16 +17,30 @@ public interface Constants {
      **********************/
 
     interface WindowSettings {
-        int WIDTH = 960;
+        int WIDTH = 1080;
         int HEIGHT = 540;
         String TITLE = "Robot Simulation";
 
-        boolean HIDE_MOUSE = true;
+        boolean HIDE_MOUSE = false;
     
         String SHADER = "./app/src/main/resources/shaders/uni_lighting";
     
         String GRID_PATH = "./app/src/main/resources/meshes/Grid.obj";
-        String GRID_SHADER = "./app/src/main/resources/shaders/grid";
+
+        String SKYBOX_PATH = "./app/src/main/resources/shaders/skybox";
+        String[] CUBEMAP_PATH = { 
+            "./app/src/main/resources/skybox/skybox/right.jpg",
+            "./app/src/main/resources/skybox/skybox/left.jpg",
+            "./app/src/main/resources/skybox/skybox/top.jpg",
+            "./app/src/main/resources/skybox/skybox/bottom.jpg",
+            "./app/src/main/resources/skybox/skybox/front.jpg",
+            "./app/src/main/resources/skybox/skybox/back.jpg"
+        };
+    }
+
+    interface MeshSettings {
+        // Mesh used before the longer ones are loaded in
+        String DEFAULT_MESH = "./app/src/main/resources/meshes/Cube.obj";
     }
 
     interface CameraSettings {
