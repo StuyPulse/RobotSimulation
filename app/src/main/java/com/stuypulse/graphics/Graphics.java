@@ -119,11 +119,21 @@ public final class Graphics {
     }
 
     private void drawFloor() {
+        // super crappy way to get infinite floor
+        final float floorScale = 100;
+        final var cameraPos = window.getCamera().getPosition();
+
         window.setShader(meshShader);
         window.draw(
             GRID_MESH.get(), 
             new Transform()
-                .setScale(new Vector3f(100, 1, 100))
+                .setScale(new Vector3f(
+                    floorScale + floorScale * Math.abs(cameraPos.y),
+                    1.0f, 
+                    floorScale + floorScale * Math.abs(cameraPos.y)
+                ))
+                .setX(cameraPos.x)
+                .setZ(cameraPos.z)
                 .setY(-0.075f), 
             new Vector3f(0, 0.8f, 0)
         );

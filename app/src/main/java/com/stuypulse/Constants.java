@@ -17,8 +17,8 @@ public interface Constants {
      **********************/
 
     interface WindowSettings {
-        int WIDTH = 1080;
-        int HEIGHT = 540;
+        int WIDTH = 1920;
+        int HEIGHT = 1080;
         String TITLE = "Robot Simulation";
 
         boolean HIDE_MOUSE = false;
