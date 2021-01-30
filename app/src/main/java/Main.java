@@ -14,8 +14,8 @@ import myrobots.piddemo.PIDDemo;
 public class Main {
 
     public static Robot<?>[] robots = new Robot<?>[]{
-        new Edwin(),
-        new JeremyBot(),
+        // new Edwin(),
+        // new JeremyBot(),
         new PIDDemo()
     };
 
