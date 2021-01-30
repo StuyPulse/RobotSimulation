@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.StuyPulse:StuyLib:v2020.2.2'
+    compile 'com.github.StuyPulse:StuyLib:v2021.0.3'
 
     compile "org.joml:joml:${jomlVersion}"
 
@@ -56,10 +56,13 @@ dependencies {
 	implementation "org.lwjgl:lwjgl-glfw"
 	implementation "org.lwjgl:lwjgl-opengl"
 	implementation "org.lwjgl:lwjgl-opengles"
+	implementation "org.lwjgl:lwjgl-stb"
 	runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
 	runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
 	runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
 	runtimeOnly "org.lwjgl:lwjgl-opengles::$lwjglNatives"
+	runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
+
 }
 
 application {
