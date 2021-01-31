@@ -6,7 +6,8 @@ import org.joml.Vector3f;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Just a file to store differnt constants
@@ -17,23 +18,19 @@ public interface Constants {
      * Graphics Constants *
      **********************/
 
-    static String getPath(String... parts) {
-        return getPath(true, parts);
-    }
+    Path APP = Paths.get(System.getProperty("user.dir"));
+    Path RESOURCES = APP.resolve("src").resolve("main").resolve("resources");
+    Path SHADERS = RESOURCES.resolve("shaders");
+    Path SKYBOX = RESOURCES.resolve("skybox");
+    Path MESHES = RESOURCES.resolve("meshes");
 
-    static String getPath(boolean isFile, String... parts) {
-        StringBuilder out = new StringBuilder();
+    static String resolve(Path a, String b, String... c) {
+        a = a.resolve(b);
 
-        String last = parts.length > 1 ? parts[parts.length - 1] : null;
+        for (String part : c)
+            a = a.resolve(part);
 
-        for (String part : parts) {
-            out.append(part);
-            if (part != last || !isFile)
-                out.append(File.separator);
-        }
-        
-        System.out.println(out.toString());
-        return out.toString();
+        return a.toString();
     }
 
     interface WindowSettings {
@@ -43,25 +40,25 @@ public interface Constants {
 
         boolean HIDE_MOUSE = true;
     
-        String SHADER = getPath("app", "src", "main", "resources", "shaders", "uni_lighting"); 
-            //"./app/src/main/resources/shaders/uni_lighting";
+        String MESH_SHADER = resolve(SHADERS, "uni_lighting"); 
     
-        String GRID_PATH = getPath("app", "src", "main", "resources", "meshes", "Grid.obj");
+        String GRID_PATH = resolve(MESHES, "Grid.obj");
             // "./app/src/main/resources/meshes/Grid.obj";
 
-        String SKYBOX_PATH = getPath("app", "src", "main", "resources", "shaders", "skybox"); 
+        String SKYBOX_PATH = resolve(SHADERS, "skybox"); 
             // "./app/src/main/resources/shaders/skybox";
 
-        String GRID_SHADER = getPath("app", "src", "main", "resources", "shaders", "floor");
+        String GRID_SHADER = resolve(SHADERS, "floor");
 
-        String CUBEMAP_BASE = getPath(false, "app", "src", "main", "resources", "skybox", "skybox");
+        // This one works a bit differently but it should be cross platform 
+        Path CUBEMAP_BASE = SKYBOX.resolve("skybox");
         String[] CUBEMAP_PATH = { 
-            CUBEMAP_BASE + "right.jpg",
-            CUBEMAP_BASE + "left.jpg",
-            CUBEMAP_BASE + "top.jpg",
-            CUBEMAP_BASE + "bottom.jpg",
-            CUBEMAP_BASE + "front.jpg",
-            CUBEMAP_BASE + "back.jpg"
+            CUBEMAP_BASE.resolve("right.jpg").toString(),
+            CUBEMAP_BASE.resolve("left.jpg").toString(),
+            CUBEMAP_BASE.resolve("top.jpg").toString(),
+            CUBEMAP_BASE.resolve("bottom.jpg").toString(),
+            CUBEMAP_BASE.resolve("front.jpg").toString(),
+            CUBEMAP_BASE.resolve("back.jpg").toString()
         };
     }
 
@@ -95,13 +92,11 @@ public interface Constants {
     }
 
     interface SwerveDriveSettings {
-        String SWERVE_PATH = getPath("app", "src", "main", "resources", "meshes", "Drivetrain_Assembly.obj");
-            // "./app/src/main/resources/meshes/Drivetrain_Assembly.obj";
+        String SWERVE_PATH = resolve(MESHES, "Drivetrain_Assembly.obj"); 
     }
 
     interface TankDriveSettings {
-        String TANK_PATH = getPath("app", "src", "main", "resources", "meshes", "Drivetrain_Assembly.obj");
-            // "./app/src/main/resources/meshes/Drivetrain_Assembly.obj";
+        String TANK_PATH = resolve(MESHES, "Drivetrain_Assembly.obj");
     }
 
     /************************
