@@ -55,7 +55,7 @@ public final class Graphics {
             HEIGHT
         );
 
-        this.meshShader = Shader.fromFiles(SHADER);
+        this.meshShader = Shader.fromFiles(MESH_SHADER);
 
         this.floorShader = Shader.fromFiles(GRID_SHADER);
 
@@ -125,7 +125,7 @@ public final class Graphics {
 
     private void drawFloor() {
         // super crappy way to get infinite floor
-        final float floorScale = 25;
+        final float floorScale = 50;
         final var cameraPos = window.getCamera().getPosition();
 
         window.setShader(floorShader);
