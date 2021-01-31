@@ -31,7 +31,7 @@ public final class MouseTracker {
     }
 
     public void setVisible(boolean isVisible) {
-        glfwSetInputMode(window, GLFW_CURSOR, isVisible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(window, GLFW_CURSOR, isVisible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
     }
 
     private void update() {

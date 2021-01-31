@@ -17,11 +17,11 @@ public interface Constants {
      **********************/
 
     interface WindowSettings {
-        int WIDTH = 1920;
-        int HEIGHT = 1080;
+        int WIDTH = 1080;
+        int HEIGHT = 540;
         String TITLE = "Robot Simulation";
 
-        boolean HIDE_MOUSE = false;
+        boolean HIDE_MOUSE = true;
     
         String SHADER = "./app/src/main/resources/shaders/uni_lighting";
     
