@@ -3,9 +3,10 @@ package com.stuypulse;
 import com.stuypulse.stuylib.math.Angle;
 
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 import static org.lwjgl.glfw.GLFW.*;
+
+import java.io.File;
 
 /**
  * Just a file to store differnt constants
@@ -16,31 +17,50 @@ public interface Constants {
      * Graphics Constants *
      **********************/
 
+    static String getPath(String... parts) {
+        return getPath(true, parts);
+    }
+
+    static String getPath(boolean isFile, String... parts) {
+        StringBuilder out = new StringBuilder();
+
+        String last = parts.length > 1 ? parts[parts.length - 1] : null;
+
+        for (String part : parts) {
+            out.append(part);
+            if (part != last || !isFile)
+                out.append(File.separator);
+        }
+        
+        System.out.println(out.toString());
+        return out.toString();
+    }
+
     interface WindowSettings {
-        int WIDTH = 1080;
-        int HEIGHT = 540;
+        int WIDTH = 1920;
+        int HEIGHT = 1080;
         String TITLE = "Robot Simulation";
 
         boolean HIDE_MOUSE = true;
     
-        String SHADER = "./app/src/main/resources/shaders/uni_lighting";
+        String SHADER = getPath("app", "src", "main", "resources", "shaders", "uni_lighting"); 
+            //"./app/src/main/resources/shaders/uni_lighting";
     
-        String GRID_PATH = "./app/src/main/resources/meshes/Grid.obj";
+        String GRID_PATH = getPath("app", "src", "main", "resources", "meshes", "Grid.obj");
+            // "./app/src/main/resources/meshes/Grid.obj";
 
-        String SKYBOX_PATH = "./app/src/main/resources/shaders/skybox";
+        String SKYBOX_PATH = getPath("app", "src", "main", "resources", "shaders", "skybox"); 
+            // "./app/src/main/resources/shaders/skybox";
+
+        String CUBEMAP_BASE = getPath(false, "app", "src", "main", "resources", "skybox", "skybox");
         String[] CUBEMAP_PATH = { 
-            "./app/src/main/resources/skybox/skybox/right.jpg",
-            "./app/src/main/resources/skybox/skybox/left.jpg",
-            "./app/src/main/resources/skybox/skybox/top.jpg",
-            "./app/src/main/resources/skybox/skybox/bottom.jpg",
-            "./app/src/main/resources/skybox/skybox/front.jpg",
-            "./app/src/main/resources/skybox/skybox/back.jpg"
+            CUBEMAP_BASE + "right.jpg",
+            CUBEMAP_BASE + "left.jpg",
+            CUBEMAP_BASE + "top.jpg",
+            CUBEMAP_BASE + "bottom.jpg",
+            CUBEMAP_BASE + "front.jpg",
+            CUBEMAP_BASE + "back.jpg"
         };
-    }
-
-    interface MeshSettings {
-        // Mesh used before the longer ones are loaded in
-        String DEFAULT_MESH = "./app/src/main/resources/meshes/Cube.obj";
     }
 
     interface CameraSettings {
@@ -73,11 +93,13 @@ public interface Constants {
     }
 
     interface SwerveDriveSettings {
-        String SWERVE_PATH = "./app/src/main/resources/meshes/Drivetrain_Assembly.obj";
+        String SWERVE_PATH = getPath("app", "src", "main", "resources", "meshes", "Drivetrain_Assembly.obj");
+            // "./app/src/main/resources/meshes/Drivetrain_Assembly.obj";
     }
 
     interface TankDriveSettings {
-        String TANK_PATH = "./app/src/main/resources/meshes/Drivetrain_Assembly.obj";
+        String TANK_PATH = getPath("app", "src", "main", "resources", "meshes", "Drivetrain_Assembly.obj");
+            // "./app/src/main/resources/meshes/Drivetrain_Assembly.obj";
     }
 
     /************************
