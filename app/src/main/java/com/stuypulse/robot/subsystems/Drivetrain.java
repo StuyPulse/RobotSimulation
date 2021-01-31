@@ -32,17 +32,4 @@ public interface Drivetrain {
      */
     List<RenderObject> getRenderable();
 
-    /**
-     * Describes how the drivetrain should be rotated
-     * 
-     * if true, the robot mesh is rotated around itself
-     * if false, the robot mesh is rotated around the origin 
-     * 
-     * 
-     * @return true or false value
-     */
-    default boolean isCentered() {
-        return true;
-    }
-
 }

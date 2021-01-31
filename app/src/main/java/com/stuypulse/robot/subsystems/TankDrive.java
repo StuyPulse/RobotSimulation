@@ -57,11 +57,6 @@ public class TankDrive implements Drivetrain {
         );
     }
 
-    // Describes how the tank drive model should be rotated
-    public boolean isCentered() {
-        return false;
-    }
-
     // protected static MeshInstance TANK_MESH = new MeshInstance(
     //     TANK_PATH, 
     //     Angle.fromDegrees(270), 

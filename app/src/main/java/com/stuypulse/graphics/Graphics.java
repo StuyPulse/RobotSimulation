@@ -38,7 +38,8 @@ public final class Graphics {
     private StopWatch timer;
 
     private Shader meshShader;
-    
+    private Shader floorShader;
+
     private Skybox skybox;
     private Shader skyboxShader;
 
@@ -55,7 +56,9 @@ public final class Graphics {
         );
 
         this.meshShader = Shader.fromFiles(SHADER);
-        this.window.setShader(meshShader);
+
+        this.floorShader = Shader.fromFiles(GRID_SHADER);
+
         this.window.getMouse().setVisible(!HIDE_MOUSE);
 
         this.skybox = new Skybox(CUBEMAP_PATH);
@@ -78,6 +81,9 @@ public final class Graphics {
     }
 
     public void drawRobot(Robot<?> r) {
+
+        window.setShader(meshShader);
+
         Vector2D pos = r.getPosition();
         Angle angle = r.getAngle();
 
@@ -93,8 +99,7 @@ public final class Graphics {
                 obj.getMesh(),
 
                 new Transform(obj.getTransform())
-                    .transform(transform)
-                    .setCentered(r.getDrivetrain().isCentered()),
+                    .transform(transform),
                 
                 r.getColor()
             );
@@ -120,10 +125,10 @@ public final class Graphics {
 
     private void drawFloor() {
         // super crappy way to get infinite floor
-        final float floorScale = 100;
+        final float floorScale = 25;
         final var cameraPos = window.getCamera().getPosition();
 
-        window.setShader(meshShader);
+        window.setShader(floorShader);
         window.draw(
             GRID_MESH.get(), 
             new Transform()

@@ -15,7 +15,6 @@ public final class Transform {
     private Vector3f scale; 
 
     private Matrix4f transform;
-    private boolean centered;
 
     public Transform(
         Vector3f translation,
@@ -29,8 +28,6 @@ public final class Transform {
         this.scale = new Vector3f(1f);
 
         this.transform = null;
-        
-        this.centered = false;
     }
 
     public Transform(
@@ -44,7 +41,6 @@ public final class Transform {
         this.scale = other.scale;
 
         this.transform = other.transform;
-        this.centered = other.centered;
     }
 
     public Transform(
@@ -63,21 +59,12 @@ public final class Transform {
     }
 
     private Matrix4f calculateTransform() {
-        if (centered) {
-            return new Matrix4f()
-                .translate(translation)
-                .scale(scale)
-                .rotate((float) yaw.toRadians(), 1, 0, 0)
-                .rotate((float) pitch.toRadians(), 0, 1, 0)
-                .rotate((float) roll.toRadians(), 0, 0, 1);
-        } else {
-            return new Matrix4f()
-                .rotate((float) yaw.toRadians(), 1, 0, 0)
-                .rotate((float) pitch.toRadians(), 0, 1, 0)
-                .rotate((float) roll.toRadians(), 0, 0, 1)
-                .translate(translation)
-                .scale(scale);
-        }
+        return new Matrix4f()
+            .translate(translation)
+            .scale(scale)
+            .rotate((float) yaw.toRadians(), 1, 0, 0)
+            .rotate((float) pitch.toRadians(), 0, 1, 0)
+            .rotate((float) roll.toRadians(), 0, 0, 1);
     }
 
     protected Matrix4f getTransform() {
@@ -135,17 +122,11 @@ public final class Transform {
         return this;
     }
 
-    public Transform setCentered(boolean isCentered) {
-        this.centered = isCentered;
-        this.transform = null;
-        return this;
-    }
-
     public Transform transform(Transform other) {
         translation = translation.add(other.translation);
-        yaw = Angle.fromDegrees(yaw.toDegrees() + other.yaw.toDegrees());
-        pitch = Angle.fromDegrees(pitch.toDegrees() + other.pitch.toDegrees());
-        roll = Angle.fromDegrees(roll.toDegrees() + other.roll.toDegrees());
+        yaw = yaw.add(other.yaw);
+        pitch = pitch.add(other.pitch);
+        roll = roll.add(other.roll);
 
         this.transform = null;
         return this;
@@ -194,10 +175,6 @@ public final class Transform {
 
     public float getScaleZ() {
         return this.scale.z;
-    }
-
-    public boolean isCentered() {
-        return centered;
     }
 
 }

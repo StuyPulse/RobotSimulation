@@ -52,6 +52,8 @@ public interface Constants {
         String SKYBOX_PATH = getPath("app", "src", "main", "resources", "shaders", "skybox"); 
             // "./app/src/main/resources/shaders/skybox";
 
+        String GRID_SHADER = getPath("app", "src", "main", "resources", "shaders", "floor");
+
         String CUBEMAP_BASE = getPath(false, "app", "src", "main", "resources", "skybox", "skybox");
         String[] CUBEMAP_PATH = { 
             CUBEMAP_BASE + "right.jpg",

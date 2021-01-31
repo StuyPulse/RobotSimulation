@@ -28,6 +28,11 @@ public class SwerveDrive implements Drivetrain {
      */
     private final SwerveModule[] modules;
     
+
+    public SwerveDrive() {
+        this(new Vector2D(1,1));
+    }
+
     /**
      * Creates a swerve drive with four wheels. 
      * 
@@ -37,7 +42,7 @@ public class SwerveDrive implements Drivetrain {
      * 
      * @param size length, width of the robot
      */
-    public SwerveDrive(Vector2D size) {
+    private SwerveDrive(Vector2D size) {
         this(new Vector2D[]{
             size.mul(new Vector2D(+0.5, +0.5)),
             size.mul(new Vector2D(+0.5, -0.5)),
@@ -51,7 +56,7 @@ public class SwerveDrive implements Drivetrain {
      * 
      * @param wheels list of wheels, must be at least 2 wheels
      */
-    public SwerveDrive(Vector2D[] wheels) {
+    private SwerveDrive(Vector2D[] wheels) {
         if (wheels.length <= 1)
             throw new IllegalArgumentException("Must have at least two wheels");
         

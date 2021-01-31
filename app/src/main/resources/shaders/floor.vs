@@ -14,13 +14,10 @@ uniform mat4 view;       // transformation into camera space
 // OUTPUTS
 
 out vec3 lightSource;
-out vec3 surfaceNormal;
+out vec3 surfaceNormal; // not surface normal but im too lazy to change the name
 
 void main() {
     
-    // surface normal
-    surfaceNormal = (mat3(transform) * normal);
-
     // position on the screen 
     vec4 worldPosition = transform * vec4(position, 1);
     gl_Position = projection * view * worldPosition;
@@ -28,5 +25,8 @@ void main() {
     // light direction    
     lightSource = vec3(-1, 0.5, -1);
 
+    // surface normal
+    surfaceNormal = (mat3(transform) * normal);
+    lightSource = lightSource - normalize(surfaceNormal);
 
 }

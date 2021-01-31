@@ -6,6 +6,7 @@ import com.stuypulse.robot.subsystems.TankDrive;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 /*************************************************/
+import com.stuypulse.stuylib.util.StopWatch;
 
 /**
  * This robot is here to show you what an example implementation
@@ -14,10 +15,14 @@ import com.stuypulse.stuylib.math.Vector2D;
  */
 public class Edwin extends Robot<TankDrive> {
 
+    private StopWatch timer;
+
     public Edwin() {
         // Make sure to pass in an instance of your drivetrain to 
         // the parent class so it can use it in the simulation
         super(new TankDrive());
+
+        timer = new StopWatch();
     }
 
     public String getAuthor() {
@@ -27,9 +32,13 @@ public class Edwin extends Robot<TankDrive> {
     public void execute() {
         // Get information about the drivetrain;
         Vector2D position = getPosition();
-        Angle angle = getAngle(); // TODO: angle is around the origin not around the robot itself
+        Angle angle = getAngle();
 
-        getDrivetrain().arcadeDrive(0.1, 0.1);
+
+        getDrivetrain().arcadeDrive(
+            timer.getTime() < 10.0 ? 1.0 : 0.0,
+            timer.getTime() < 10.0 ? 0.0 : 1.0
+        );
     
     }
 

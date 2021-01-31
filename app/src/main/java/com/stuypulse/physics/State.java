@@ -1,5 +1,7 @@
 package com.stuypulse.physics;
 
+import com.stuypulse.stuylib.math.Angle;
+
 /**
  * This class basically combines the position and the velocity classes into one.
  * 
@@ -32,7 +34,7 @@ public final class State {
     }
     
     public void update(Force force, double dt) {
-        this.vel = this.vel.update(force.rotate(pos.angle), dt);
+        this.vel = this.vel.update(force.rotate(Angle.kZero.sub(pos.angle)), dt);
         this.pos = this.pos.update(this.vel, dt);
     }
 

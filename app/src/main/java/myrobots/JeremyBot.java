@@ -29,7 +29,7 @@ public class JeremyBot extends Robot<SwerveDrive> {
     public JeremyBot() {
         // Make sure to pass in an instance of your drivetrain to 
         // the parent class so it can use it in the simulation
-        super(new SwerveDrive(new Vector2D(2.0, 2.0)));
+        super(new SwerveDrive());
     }
 
     public String getAuthor() {
@@ -47,11 +47,11 @@ public class JeremyBot extends Robot<SwerveDrive> {
         double turn = 0;
 
         // SWERVE MOVEMENT HERE
-        direction = direction.add(new Vector2D(0.01,0));
-        turn = 0.01;
+        direction = direction.add(new Vector2D(0.1,0));
+        turn = 0.1;
 
         // Makes the control field centric
-        direction = direction.rotate(Angle.kZero.sub(angle));
+        direction = direction.rotate(angle);
 
         // Drive the drivetrain
         getDrivetrain().swerveDrive(direction, turnFilter.get(turn));
