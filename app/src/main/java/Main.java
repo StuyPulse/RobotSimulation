@@ -6,7 +6,9 @@ import com.stuypulse.robot.subsystems.*;
 
 import java.util.List;
 import myrobots.*;
-import myrobots.piddemo.PIDDemo;
+import myrobots.control.*;
+import myrobots.piddemo.*;
+
 
 /**
  * This is just a really simple bootstrap into a robot simulation.
@@ -14,9 +16,12 @@ import myrobots.piddemo.PIDDemo;
 public class Main {
 
     public static Robot<?>[] robots = new Robot<?>[]{
-        new Edwin(),
-        new JeremyBot(),
-        new PIDDemo()
+        // new Edwin(),
+        // new JeremyBot(),
+        // new PIDDemo()
+        new PIDBot(),
+        new DRBot(),
+        new BBBot()
     };
 
     public static void main(String[] args) throws Exception {

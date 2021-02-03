@@ -1,4 +1,4 @@
-package myrobots.piddemo;
+package myrobots.control;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.TankDrive;
@@ -7,14 +7,14 @@ import org.joml.Vector3f;
 
 import com.stuypulse.stuylib.control.*;
 
-public class PIDDemo extends Robot<TankDrive> {
+public class BBBot extends Robot<TankDrive> {
 
-    private PIDController controller;
+    private double target;
 
-    public PIDDemo() {
+    public BBBot() {
         super(new TankDrive());
 
-        controller = new PIDController(0.5, 0, 0.2);
+        target = 5;
     }
     
     /**
@@ -23,16 +23,24 @@ public class PIDDemo extends Robot<TankDrive> {
     
     @Override
     protected void execute() {
-        final double target = 5;
-        final double x = getPosition().x;
+        final double distance = getPosition().x;
         
         final TankDrive drivetrain = getDrivetrain();
 
-        // pid algorithm implemented here
-        drivetrain.arcadeDrive(
-            controller.update(target, x),
-            0
-        );
+        double error = target - distance;
+
+        double speed;
+
+        if (error > 0) {
+            speed = 0.50;
+        } else if (error < 0) {
+            speed = -0.50;
+        } else {
+            speed = 0;
+        }
+
+        drivetrain.arcadeDrive(speed, 0);
+
     }
     
     /**
