@@ -12,6 +12,8 @@ import com.stuypulse.physics.State;
 import com.stuypulse.physics.Position;
 import com.stuypulse.stuylib.util.StopWatch;
 
+import org.joml.Vector3f;
+
 /**
  * This is the robot class that you will be extending when making your
  * own robot. It is relatively simple, and supports different types of drivetrain.
@@ -41,8 +43,8 @@ public abstract class Robot<DT extends Drivetrain> {
      * 
      * @return the color you want the robot to be
      */
-    public Color getColor() {
-        return Color.BLACK;
+    public Vector3f getColor() {
+        return new Vector3f(1,1,1);
     }
 
     /**********************************/
@@ -94,7 +96,6 @@ public abstract class Robot<DT extends Drivetrain> {
         this.drivetrain = drivetrain;
         this.timer = new StopWatch();
 
-        // TODO: fix this, make it more automatic
         Vector2D pos = new Vector2D(0, 0);
         this.state = new State(new Position(pos));
     }
@@ -104,11 +105,20 @@ public abstract class Robot<DT extends Drivetrain> {
      * it handles physics and the user code.
      */
     public final void periodic() {
-        final double dt = timer.reset();
+        periodic(timer.reset());
+    }
+
+    /**
+     * This part of the code is executed every cycle,
+     * but it can be controlled by an external timer
+     * 
+     * @param dt delta time
+     */
+    public final void periodic(double dt) {
         state.update(drivetrain.getNetForce(), dt);
         execute();
     }
-
+    
     /**
      * @return The authors name and the name of the robot
      */

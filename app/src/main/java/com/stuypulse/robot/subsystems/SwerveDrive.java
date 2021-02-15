@@ -2,14 +2,17 @@ package com.stuypulse.robot.subsystems;
 
 import com.stuypulse.stuylib.math.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import com.stuypulse.graphics.Line;
+import com.stuypulse.graphics.MeshInstance;
+import com.stuypulse.graphics.RenderObject;
 import com.stuypulse.physics.Force;
 import com.stuypulse.robot.subsystems.components.SwerveModule;
-import com.stuypulse.robot.subsystems.components.Wheel;
+
+import static com.stuypulse.Constants.SwerveDriveSettings.*;
 
 /**
  * This is an implementation of SwerveDrive for this simulation.
@@ -25,6 +28,11 @@ public class SwerveDrive implements Drivetrain {
      */
     private final SwerveModule[] modules;
     
+
+    public SwerveDrive() {
+        this(new Vector2D(1,1));
+    }
+
     /**
      * Creates a swerve drive with four wheels. 
      * 
@@ -34,7 +42,7 @@ public class SwerveDrive implements Drivetrain {
      * 
      * @param size length, width of the robot
      */
-    public SwerveDrive(Vector2D size) {
+    private SwerveDrive(Vector2D size) {
         this(new Vector2D[]{
             size.mul(new Vector2D(+0.5, +0.5)),
             size.mul(new Vector2D(+0.5, -0.5)),
@@ -48,7 +56,7 @@ public class SwerveDrive implements Drivetrain {
      * 
      * @param wheels list of wheels, must be at least 2 wheels
      */
-    public SwerveDrive(Vector2D[] wheels) {
+    private SwerveDrive(Vector2D[] wheels) {
         if (wheels.length <= 1)
             throw new IllegalArgumentException("Must have at least two wheels");
         
@@ -88,30 +96,27 @@ public class SwerveDrive implements Drivetrain {
         );
     }
 
-    /**
-     * This is some messy code for drawing the SwerveDrive
-     * The reason its messy is because it has to draw each wheel
-     */
-    public Line[] getMesh() {
-        double wheelSize = 0.4;
+    /******************
+     * RENDER DETAILS *
+     ******************/
 
-        LinkedList<Line> lines = new LinkedList<>();
+    protected static MeshInstance SWERVE_MESH = new MeshInstance(
+        SWERVE_PATH, 
+        Angle.fromDegrees(270.0),
+        Angle.fromDegrees(90.0),
+        Angle.kZero
+    );
+
+    public List<RenderObject> getRenderable() {
+
+        List<RenderObject> out = new ArrayList<>();
+
+        out.add(new RenderObject(
+            SWERVE_MESH.get()
+        ));
+
+        return out;
         
-        for(int i = 0; i < modules.length; ++i) {
-            lines.push(new Line(
-                modules[(i + 0) % modules.length].getPosition(), 
-                modules[(i + 1) % modules.length].getPosition()
-            ));
-        }
-        
-        for(Wheel w : modules) {
-            lines.push(new Line(
-                w.getPosition().add(w.getAngle().getVector().mul(wheelSize)), 
-                w.getPosition().sub(w.getAngle().getVector().mul(wheelSize))
-            ));
-        }
-        
-        return lines.toArray(new Line[0]);
     }
 
 }

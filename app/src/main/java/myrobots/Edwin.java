@@ -1,12 +1,12 @@
 package myrobots;
 
 /*** VERY VERY IMPORTANT THAT YOU IMPORT THESE ***/
-import java.awt.Color;
-import com.stuypulse.stuylib.math.*;
-import com.stuypulse.stuylib.control.*;
-import com.stuypulse.robot.subsystems.*;
-import com.stuypulse.robot.*;
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.subsystems.TankDrive;
+import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.math.Vector2D;
 /*************************************************/
+import com.stuypulse.stuylib.util.StopWatch;
 
 /**
  * This robot is here to show you what an example implementation
@@ -15,10 +15,14 @@ import com.stuypulse.robot.*;
  */
 public class Edwin extends Robot<TankDrive> {
 
+    private StopWatch timer;
+
     public Edwin() {
         // Make sure to pass in an instance of your drivetrain to 
         // the parent class so it can use it in the simulation
         super(new TankDrive());
+
+        timer = new StopWatch();
     }
 
     public String getAuthor() {
@@ -30,11 +34,12 @@ public class Edwin extends Robot<TankDrive> {
         Vector2D position = getPosition();
         Angle angle = getAngle();
 
-        getDrivetrain().arcadeDrive(1, 1);
-    }
 
-    public Color getColor() {
-        return Color.RED;
+        getDrivetrain().arcadeDrive(
+            timer.getTime() < 10.0 ? 1.0 : 0.0,
+            timer.getTime() < 10.0 ? 0.0 : 1.0
+        );
+    
     }
 
 }

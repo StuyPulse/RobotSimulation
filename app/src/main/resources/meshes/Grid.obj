@@ -1,0 +1,12 @@
+v 1 0 1
+v 1 0 -1
+v -1 0 -1
+v -1 0 1
+# vertex normals dont really matter for how this mesh is used
+vn 1 1 1
+vn 1 1 -1
+vn -1 1 -1 
+vn -1 1 1 
+
+f 1//1 2//2 3//3
+f 3//3 4//4 1//1

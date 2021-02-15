@@ -1,9 +1,16 @@
 package com.stuypulse.robot.subsystems;
 
-import com.stuypulse.stuylib.math.*;
-import com.stuypulse.graphics.Line;
+import com.stuypulse.graphics.MeshInstance;
+import com.stuypulse.graphics.RenderObject;
 import com.stuypulse.physics.Force;
 import com.stuypulse.robot.subsystems.components.Wheel;
+import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.math.Vector2D;
+
+import static com.stuypulse.Constants.TankDriveSettings.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is an implementation of TankDrive or DifferentialDrive for this simulation.
@@ -50,17 +57,25 @@ public class TankDrive implements Drivetrain {
         );
     }
 
-    public Line[] getMesh() {
-        return new Line[] {
-            // Box
-            new Line(new Vector2D(+1.0, +1.0), new Vector2D(-1.0, +1.0)),
-            new Line(new Vector2D(-1.0, +1.0), new Vector2D(-1.0, -1.0)),
-            new Line(new Vector2D(-1.0, -1.0), new Vector2D(+1.0, -1.0)),
-            new Line(new Vector2D(+1.0, -1.0), new Vector2D(+1.0, +1.0)),
+    // protected static MeshInstance TANK_MESH = new MeshInstance(
+    //     TANK_PATH, 
+    //     Angle.fromDegrees(270), 
+    //     Angle.fromDegrees(90), 
+    //     Angle.kZero
+    // );
 
-            // Wheels
-            new Line(new Vector2D(-0.8, +1.2), new Vector2D(+0.8, +1.2)),
-            new Line(new Vector2D(-0.8, -1.2), new Vector2D(+0.8, -1.2)),
-        };
+    protected static MeshInstance TANK_MESH = SwerveDrive.SWERVE_MESH;
+
+    public List<RenderObject> getRenderable() {
+        
+        List<RenderObject> out = new ArrayList<>();
+        
+        out.add(new RenderObject(
+            TANK_MESH.get()
+        ));
+
+        return out;
+
     }
+
 }
