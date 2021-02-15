@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.StuyPulse:StuyLib:v2021.0.5'
+    compile 'com.github.StuyPulse:StuyLib:v2021.0.7'
 
     compile "org.joml:joml:${jomlVersion}"
 
